@@ -45,7 +45,7 @@ One of the design goals of this player was to make it extremely flexible to modi
 - .pt-buffering (state: sound is buffering)
 - .pt-paused (state: sound is paused)
 
-## Default controls markup
+## Default controls markup template
           <div class="pt-controls-markup">
             <div class="pt-controls">
               <a class="pt-play-pause" href="#" title="Play/Pause">
