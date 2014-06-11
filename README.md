@@ -1,4 +1,4 @@
-pushtape-player
+pushtape-player.js
 ===============
 
 A javascript music player for the Pushtape.com project, including global controls and various config options. It will scan an entire page for links to play. No dependencies other than Soundmanager2.
