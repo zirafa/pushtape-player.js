@@ -45,7 +45,7 @@ One of the design goals of this player was to make it extremely flexible to modi
 - .pt-buffering (state: sound is buffering)
 - .pt-paused (state: sound is paused)
 
-## Default controls markup (see config.addControlsMarkup above)
+## Default controls markup
           <div class="pt-controls-markup">
             <div class="pt-controls">
               <a class="pt-play-pause" href="#" title="Play/Pause">
@@ -67,5 +67,4 @@ One of the design goals of this player was to make it extremely flexible to modi
               </div>
             </div>
           </div>
-
 
