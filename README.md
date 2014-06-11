@@ -1,7 +1,7 @@
 Pushtape-player.js
 ===============
 
-A customizable JS audio player for the [Pushtape](http://www.pushtape.com) project, including global playback controls and various config options. Treats a page as a playlist of audio links. No dependencies other than [Soundmanager2](http://www.schillmania.com/projects/soundmanager2). 
+A customizable JS audio page player for the [Pushtape](http://www.pushtape.com) project, including global playback controls and various config options. Treats a page as a playlist of audio links. No dependencies other than [Soundmanager2](http://www.schillmania.com/projects/soundmanager2). 
 
 #Installation
 - Include soundmanager2.js and make sure the swf file path exists.
