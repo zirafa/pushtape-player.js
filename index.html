@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Pushtape Player - Text Only</title>
+<script type="text/javascript" src="js/soundmanager2.js"></script>
+<script type="text/javascript" src="js/pushtape-player.js"></script>
+<link href="css/style.css" type="text/css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+
+/**
+ * Setup the Pushtape Player
+ */
+var pushtapePlayer = null; // Instance
+
+soundManager.setup({
+  debugMode: true,   // disable or enable debug output
+  url: 'swf/',       // path to directory containing SM2 SWF
+  useHighPerformance: true, // keep flash on screen, boost performance
+  preferFlash: true, // for visualization effects (smoother scrubber)
+  flashVersion: 9,
+  wmode: 'transparent', // transparent SWF, if possible
+  onready: function() {
+    // Initialize pushtape player when SM2 is ready
+    pushtapePlayer = new PushtapePlayer();
+    pushtapePlayer.config = {
+      playNext: true, // stop after one sound, or play through list until end
+      autoPlay: false,  // start playing the first sound right away
+      repeatAll: false, // repeat playlist after last track
+      containerClass : '', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+      addControlsMarkup: {
+        'enabled' : false, 
+        'controlsMarkupClass' :'pt-controls-markup',
+        'position' : 'top'
+      } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
+    }
+    pushtapePlayer.init();
+  },
+  ontimeout: function() {
+    // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
+    console.log('Error initializing the Pushtape player.');
+  }  
+});
+
+</script>
+
+</head>
+<body>
+<h2>Pushtape Player: Text Only</h2>
+
+  <p>
+  This example demonstrates a text-only audio player, with text based icons (only unicode characters, CSS & HTML entities).<br/>
+  View source on this page to see how this code is implemented.
+  </p>
+
+  <!-- CONTROLS MARKUP, MANUALLY ADDED -->
+  <div class="pt-controls-markup">
+    <div class="pt-controls">
+      <a class="pt-play-pause" href="#" title="Play/Pause">
+        <span class="play-btn">▶</span>
+        <span class="pause-btn">❚❚</span>
+      </a>
+      <a class="pt-next" href="#" title="Next"> &raquo;</a>
+      <a class="pt-previous" href="#" title="Previous">&laquo; </a>
+      <span class="pt-current-track-title"></span>
+  
+      <div class="pt-scrubber">
+        <div class="pt-statusbar">  
+          <div class="pt-loading"></div>  
+          <div class="pt-position"><div class="pt-handle"></div></div>  
+        </div>
+      </div>
+      <div class="pt-time">
+        <span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>
+      </div>
+    </div>
+  </div>
+    
+  <!-- PLAYER WILL LOOK FOR AUDIO LINKS INSIDE .PT-PLAYLIST -->
+  <ol class="pt-playlist">
+    <li><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>  
+    <li><a href="audio/118935__dobroide__20110423-night-chorus_0.mp3" title="Night Chorus of birds...">Night Chorus - dobroide</a></li>  
+    <li><a href="audio/104483__soundbytez__desert-aviary02.mp3">Desert Aviary - Soundbytez</a></li>  
+    <li><a href="audio/5 Crunchy Space.mp3">Crunchy Space - Arthur Hamidi</a></li>
+  </ol>
+
+</body>
+</html>
+

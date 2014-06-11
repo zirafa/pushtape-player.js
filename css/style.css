@@ -1,0 +1,120 @@
+﻿body {
+  max-width:90%;
+  margin:1em auto;
+  font-family:"Courier New", Courier, monospace;
+  font-size:1.5em;
+  line-height:1.4em;
+}
+a {
+  color:#0061b0;
+  text-decoration:none;
+}
+.pt-previous,
+.pt-next {
+  font-size:2.5em;
+  float:right;
+  margin-left:.5em;
+}
+
+.pause-btn,
+.play-btn {
+  display:inline-block;
+}
+.pt-play-pause {
+  font-size:1.7em;
+  letter-spacing:-5px;
+  position:relative;
+  top:2px;
+}
+
+/* Hide/Show */
+.pause-btn,
+.pt-play-pause.pt-playing .play-btn {
+  display:none;
+} 
+.pt-play-pause.pt-playing .pause-btn {
+  display:inline-block;
+}
+
+.pause-btn {
+  position:relative;
+  left:-4px;
+  top:-3px;
+  letter-spacing:-.005em;
+}
+
+.pt-link.pt-loading { opacity:.2;}
+.pt-link.pt-playing { opacity: 1; font-weight:bold;}
+.pt-link.pt-paused  { opacity:.5; font-weight:bold;}
+.pt-link.pt-cue { color:red;}
+
+.pt-link:before {
+  content: '▶ ';
+}
+.pt-link.pt-playing:before {
+  content: '❚❚ ';
+}
+
+.pt-scrubber {
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    position: relative;
+}
+.pt-scrubber .pt-statusbar {
+
+  height: 0.3em;
+  position: relative;
+  border-right:solid 1px #CCC;
+  border-bottom:solid 1px #CCC;
+  border-top:solid 1px #DCDCDC;
+  border-left:solid 1px #DCDCDC;
+  border-radius:1em;
+  background:#F9F9F9;
+}
+.pt-scrubber.dragging .pt-statusbar {
+  cursor: grabbing;
+  cursor:-webkit-grabbing;
+}
+.pt-scrubber .pt-statusbar .pt-position,
+.pt-scrubber .pt-statusbar .pt-loading {
+  position: absolute;    
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius:1em;
+  width:0;
+}
+.pt-scrubber .pt-statusbar .pt-position {
+  background-color: #666666;
+  position:relative;
+}
+.pt-scrubber .pt-statusbar .pt-loading {
+  background-color:#F1F1F1;
+}
+.pt-scrubber .pt-statusbar .pt-handle {
+  position:absolute;
+  width:.75em;
+  height:.75em;
+  right:-.35em; /* Half of width */
+  top:-.35em; /* Slightly less than half of height*/
+  border-radius:50%;
+  background:#FDFDFD;
+  border:double 3px #AAA;
+  transition:  all .1s;
+  cursor: pointer;
+}
+.pt-time {
+  float:right;
+  font-size:.7em;
+}
+ol.playlist {
+  clear:both;
+  list-style-type:decimal-leading-zero;
+  margin-left:.5em;
+}
+ol.playlist a {
+  display:block;
+}
+ol.playlist a:hover {
+  background:#FCFCFC;
+}
