@@ -1,7 +1,7 @@
 pushtape-player.js
 ===============
 
-A javascript music player for the Pushtape.com project, including global controls and various config options. It will scan an entire page for links to play. No dependencies other than Soundmanager2.
+A javascript music player for the Pushtape.com project, including global controls and various config options. It will scan an entire page for links to play. No dependencies other than [Soundmanager2|http://www.schillmania.com/projects/soundmanager2].
 
 #Installation
 - Make sure Soundmanager2 is installed. Typically this means including the soundmanager2 script and making sure the swf file is on your server.
