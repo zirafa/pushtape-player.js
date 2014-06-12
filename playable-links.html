@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Pushtape Player :: Fixed Position Controls</title>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href="css/playable-links.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="js/soundmanager2.js"></script>
+<script type="text/javascript" src="js/pushtape-player.js"></script>
+<script type="text/javascript">
+/**
+ * Setup the Pushtape Player
+ */
+var pushtapePlayer = null; // Instance
+
+soundManager.setup({
+  debugMode: true,   // disable or enable debug output
+  url: 'swf/',       // path to directory containing SM2 SWF
+  useHighPerformance: true, // keep flash on screen, boost performance
+  preferFlash: true, // for visualization effects (smoother scrubber)
+  flashVersion: 9,
+  wmode: 'transparent', // transparent SWF, if possible
+  onready: function() {
+    // Initialize pushtape player when SM2 is ready
+    pushtapePlayer = new PushtapePlayer();
+    pushtapePlayer.config = {
+      playNext: false, // stop after one sound, or play through list until end
+      autoPlay: false,  // start playing the first sound right away
+      repeatAll: false, // repeat playlist after last track
+      containerClass : '', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+      addControlsMarkup: {
+        'enabled' : false, 
+        'controlsMarkupClass' :'pt-controls-markup',
+        'position' : 'top'
+      } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
+    }
+    pushtapePlayer.init();
+  },
+  ontimeout: function() {
+    // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
+    console.log('Error initializing the Pushtape player.');
+  }  
+});
+
+</script>
+</head>
+
+<body>
+  <h2><a href="index.html">Pushtape Player</a> &raquo; Playable Links</h2>
+  <p>
+  This example demonstrates the player will work with inline audio links even if there is no control markup present. This is very similar to <a href="http://www.schillmania.com/projects/soundmanager2/demo/play-mp3-links/">Soundmanager2's Playable MP3 Links</a> demo, but uses Font Awesome icons.
+  View source to see underlying code.
+  </p>
+
+  <!-- CONTROL MARKUP REMOVED AND config.addControlsMarkup = false. Therefore no global controls are displayed. -->
+
+  <!-- Just some filler text to make the page scroll. Also demonstrates an inline audio link -->
+  <h2>Filler text with inline links</h2>
+  <div class="filler">
+    <p>
+    Ahab's harpoon, the one forged at Perth's fire, remained firmly lashed in its conspicuous crotch, so that it projected beyond his <a href="https://ia600406.us.archive.org/15/items/KillerWhaleorcinusOrcaSoundsVocalizations/killer_whale.mp3" title="Killer whale sounds">whale-boat's bow</a>; but the sea that had stove its bottom had caused the loose leather sheath to drop off; and from the keen steel barb there now came a levelled flame of pale, forked fire. As the <a href="https://ia601601.us.archive.org/34/items/aporee_7202_8917/AmsterdamLeidsekruisstraatNightfolks.mp3" title="Crowded bar">silent harpoon</a> burned there like a serpent's tongue, Starbuck grasped Ahab by the arm—"God, God is against thee, old man; forbear! 'tis an <a href="https://ia601609.us.archive.org/25/items/aporee_7521_9265/costabellabarka.mp3" title="Boat sounds...">ill voyage</a>! ill begun, ill continued; let me square the yards, while we may, old man, and make a fair wind of it homewards, to go on a better voyage than this."
+    Overhearing Starbuck, the panic-stricken crew instantly ran to the braces—though not a sail was left aloft. For the moment <a href="https://ia601005.us.archive.org/17/items/SwitzerlandCows/VachesCloches.mp3" title="Vaches cloches">all the aghast mate's thoughts seemed theirs</a>; they raised a half mutinous cry. But dashing the rattling lightning links to the deck, and snatching the burning harpoon, Ahab waved it like a torch among them; swearing to transfix with it the first sailor that but cast loose a rope's end. Petrified by his aspect, and still more shrinking from the fiery dart that he held, the men fell back in dismay, and Ahab again spoke:—
+    "All your oaths to hunt the <a href="https://ia600406.us.archive.org/31/items/NightInsectsAtFgtc-Aug.292009/082909NightInsectsAtFgtc.mp3" title="Night insects">White Whale</a> are as binding as mine; and heart, soul, and body, lungs and life, old Ahab is bound. And that ye may know to what tune this heart beats; look ye here; thus I blow out the last fear!" And with one blast of his breath <a href="https://archive.org/download/Lc-eph01UnderwaterNoises/15-PierpaoloLeo-Bioluminescence.mp3" title=" Pierpaolo Leo - Bioluminescence ">he extinguished the flame</a>.
+    </p>
+  </div>
+
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Pushtape Player :: Fixed Position Controls</title>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href="css/fixed-position.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="js/soundmanager2.js"></script>
+<script type="text/javascript" src="js/pushtape-player.js"></script>
+<script type="text/javascript">
+/**
+ * Setup the Pushtape Player
+ */
+var pushtapePlayer = null; // Instance
+
+soundManager.setup({
+  debugMode: true,   // disable or enable debug output
+  url: 'swf/',       // path to directory containing SM2 SWF
+  useHighPerformance: true, // keep flash on screen, boost performance
+  preferFlash: true, // for visualization effects (smoother scrubber)
+  flashVersion: 9,
+  wmode: 'transparent', // transparent SWF, if possible
+  onready: function() {
+    // Initialize pushtape player when SM2 is ready
+    pushtapePlayer = new PushtapePlayer();
+    pushtapePlayer.config = {
+      playNext: true, // stop after one sound, or play through list until end
+      autoPlay: false,  // start playing the first sound right away
+      repeatAll: false, // repeat playlist after last track
+      containerClass : '', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+      addControlsMarkup: {
+        'enabled' : false, 
+        'controlsMarkupClass' :'pt-controls-markup',
+        'position' : 'top'
+      } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
+    }
+    pushtapePlayer.init();
+  },
+  ontimeout: function() {
+    // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
+    console.log('Error initializing the Pushtape player.');
+  }  
+});
+
+</script>
+</head>
+
+<body>
+  <h2><a href="index.html">Pushtape Player</a> &raquo; Fixed Position Controls</h2>
+  <p>
+  This example is similar to the basic audio player, but controls are fixed to the bottom of the page with CSS. Note that <a href="http://caniuse.com/css-fixed">position:fixed can be unreliable</a> on mobile browsers.
+  View source to see underlying code.
+  </p>
+
+  <!-- PLAYER WILL LOOK FOR ALL AUDIO LINKS ON THE PAGE, EVEN IF OUTSIDE OF THIS LIST -->
+  <ul class="links">
+    <li class="first"><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>
+    <li><a href="audio/118935__dobroide__20110423-night-chorus_0.mp3" title="Night Chorus of birds...">Night Chorus - dobroide</a></li>  
+    <li><a href="audio/104483__soundbytez__desert-aviary02.mp3">Desert Aviary - Soundbytez</a></li>  
+    <li class="last"><a href="audio/5 Crunchy Space.mp3">Crunchy Space - Arthur Hamidi</a></li>
+  </ul>
+
+  <!-- Just some filler text to make the page scroll. Also demonstrates an inline audio link -->
+  <h2>Filler text with inline links</h2>
+  <div class="filler">
+    <p>
+    Ahab's harpoon, the one forged at Perth's fire, remained firmly lashed in its conspicuous crotch, so that it projected beyond his <a href="https://ia600406.us.archive.org/15/items/KillerWhaleorcinusOrcaSoundsVocalizations/killer_whale.mp3" title="Killer whale sounds">whale-boat's bow</a>; but the sea that had stove its bottom had caused the loose leather sheath to drop off; and from the keen steel barb there now came a levelled flame of pale, forked fire. As the silent harpoon burned there like a serpent's tongue, Starbuck grasped Ahab by the arm—"God, God is against thee, old man; forbear! 'tis an ill voyage! ill begun, ill continued; let me square the yards, while we may, old man, and make a fair wind of it homewards, to go on a better voyage than this."
+    Overhearing Starbuck, the panic-stricken crew instantly ran to the braces—though not a sail was left aloft. For the moment all the aghast mate's thoughts seemed theirs; they raised a half mutinous cry. But dashing the rattling lightning links to the deck, and snatching the burning harpoon, Ahab waved it like a torch among them; swearing to transfix with it the first sailor that but cast loose a rope's end. Petrified by his aspect, and still more shrinking from the fiery dart that he held, the men fell back in dismay, and Ahab again spoke:—
+    "All your oaths to hunt the White Whale are as binding as mine; and heart, soul, and body, lungs and life, old Ahab is bound. And that ye may know to what tune this heart beats; look ye here; thus I blow out the last fear!" And with one blast of his breath he extinguished the flame.
+    </p>
+    
+    <p>Something of the salt sea yet lingered in old Bildad's language, heterogeneously mixed with Scriptural and domestic phrases.</p>
+    
+    <p>"Avast there, avast there, Bildad, avast now spoiling our harpooneer," Peleg. "Pious harpooneers never make good voyagers&mdash;it takes the shark out of 'em; no harpooneer is worth a straw who aint pretty sharkish. There was young Nat Swaine, once the bravest boat-header out of all Nantucket and the Vineyard; he joined the meeting, and never came to good. He got so frightened about his plaguy soul, that he shrinked and sheered away from whales, for fear of after-claps, in case he got stove and went to Davy Jones."</p>
+    
+    <p>"Peleg! Peleg!" said Bildad, lifting his eyes and hands, "thou thyself, as I myself, hast seen many a perilous time; thou knowest, Peleg, what it is to have the fear of death; how, then, can'st thou prate in this ungodly guise. Thou beliest thine own heart, Peleg. Tell me, when this same Pequod here had her three masts overboard in that typhoon on Japan, that same voyage when thou went mate with Captain Ahab, did'st thou not think of Death and the Judgment then?"</p>
+    
+    <p>"Hear him, hear him now," cried Peleg, marching across the cabin, and thrusting his hands far down into his pockets,&mdash;"hear him, all of ye. Think of that! When every moment we thought <a href="https://ia601609.us.archive.org/25/items/aporee_7521_9265/costabellabarka.mp3" title="Boat sounds...">the ship would sink</a>! Death and the Judgment then? What? With all three masts making such an everlasting thundering against the side; and every sea breaking over us, fore and aft. Think of Death and the Judgment then? No! no time to think about Death then. Life was what Captain Ahab and I was thinking of; and how to save all hands&mdash;how to rig jury-masts&mdash;how to get into the nearest port; that was what I was thinking of."</p>
+  </div>
+
+
+  <!-- CONTROLS MARKUP MANUALLY ADDED HERE FOR GREATER CONTROL. -->    
+  <div class="pt-controls-markup">
+      <div class="pt-controls">
+        <a class="pt-play-pause" href="#" title="Play/Pause">
+          <span class="play-btn"><i class="fa fa-play"></i></span>
+          <span class="pause-btn"><i class="fa fa-pause"></i></span>
+        </a>
+        <a class="pt-next" href="#" title="Next"> <i class="fa fa-step-forward"></i></a>
+        <a class="pt-previous" href="#" title="Previous"> <i class="fa fa-step-backward"></i> </a>
+        <span class="pt-current-track-title">Play all</span>
+
+        <div class="pt-scrubber">
+          <div class="pt-statusbar">  
+            <div class="pt-loading"></div>  
+            <div class="pt-position"><div class="pt-handle"></div></div>  
+          </div>
+        </div>
+        <div class="pt-time">
+          <span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>

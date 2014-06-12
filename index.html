@@ -2,11 +2,14 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Pushtape Player - Text Only</title>
+<title>Pushtape Player Examples</title>
 <script type="text/javascript" src="js/soundmanager2.js"></script>
 <script type="text/javascript" src="js/pushtape-player.js"></script>
-<link href="css/style.css" type="text/css" rel="stylesheet">
+<link href="css/index.css" type="text/css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <script type="text/javascript">
+
 /**
  * Setup the Pushtape Player
  */
@@ -45,44 +48,25 @@ soundManager.setup({
 
 </head>
 <body>
-<h2>Pushtape Player: Text Only</h2>
+  <div id="wrapper">
+    <h1>Pushtape Player Examples</h1>
+    <p>A customizable JS audio page player with global playback controls, based on Soundmanager2.</p>
+    <p class="quick-links">
+      <a href="http://github.com/zirafa/pushtape-player" class="github" target="_blank"><i class="fa fa-github"> </i> Download from Github</a>
+      <a href="http://www.pushtape.com"> About Pushtape</a>
+      <a href="http://www.twitter.com/pushtape"><i class="fa fa-twitter"></i></a>
+      <a href="http://www.facebook.com/pushtape"><i class="fa fa-facebook"></i></a>
+    </p>
+    <p>Please see the <a href="https://github.com/zirafa/pushtape-player/blob/master/README.md" target="_blank">README.md</a> on Github for setup and configuration options, i.e. playNext, autoPlay, repeatAll, addControlsmarkup, etc.</p>
+    <ul class="examples">
+      <li><h3><a href="basic-player.html">Basic Player.</a></h3>Basic player with icons from Font Awesome, and global controls dynamically added.</li>
+      <li><h3><a href="text-player.html">Text Player.</a></h3> Minimalist text player using unicode/HTML icons.</li>
+      <li><h3><a href="fixed-position.html">Fixed Position Controls.</a></h3> Similar to basic player, but global controls are docked to the bottom of the page.</li>
+      <li><h3><a href="exploded-controls.html">Exploded Controls.</a></h3> Demonstrates how to manually alter controls markup on a page.</li>
+      <li><h3><a href="playable-links.html">Playable links.</a></h3> No global controls, similar to Soundmanager2's <a href="http://www.schillmania.com/projects/soundmanager2/demo/play-mp3-links/">Playable MP3 Links Demo.</a></li>
+    </ul>
 
-  <p>
-  This example demonstrates a text-only audio player, with text based icons (only unicode characters, CSS & HTML entities).<br/>
-  View source on this page to see how this code is implemented.
-  </p>
-
-  <!-- CONTROLS MARKUP, MANUALLY ADDED -->
-  <div class="pt-controls-markup">
-    <div class="pt-controls">
-      <a class="pt-play-pause" href="#" title="Play/Pause">
-        <span class="play-btn">▶</span>
-        <span class="pause-btn">❚❚</span>
-      </a>
-      <a class="pt-next" href="#" title="Next"> &raquo;</a>
-      <a class="pt-previous" href="#" title="Previous">&laquo; </a>
-      <span class="pt-current-track-title"></span>
-  
-      <div class="pt-scrubber">
-        <div class="pt-statusbar">  
-          <div class="pt-loading"></div>  
-          <div class="pt-position"><div class="pt-handle"></div></div>  
-        </div>
-      </div>
-      <div class="pt-time">
-        <span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>
-      </div>
-    </div>
   </div>
-    
-  <!-- PLAYER WILL LOOK FOR AUDIO LINKS INSIDE .PT-PLAYLIST -->
-  <ol class="pt-playlist">
-    <li><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>  
-    <li><a href="audio/118935__dobroide__20110423-night-chorus_0.mp3" title="Night Chorus of birds...">Night Chorus - dobroide</a></li>  
-    <li><a href="audio/104483__soundbytez__desert-aviary02.mp3">Desert Aviary - Soundbytez</a></li>  
-    <li><a href="audio/5 Crunchy Space.mp3">Crunchy Space - Arthur Hamidi</a></li>
-  </ol>
-
 </body>
 </html>
 

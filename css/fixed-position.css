@@ -1,0 +1,157 @@
+﻿html {
+  width:100%;
+}
+body {
+  max-width:800px;
+  margin:1em;
+  font-family: 'Open Sans', sans-serif;
+  line-height:1.4em;
+  /* With fixed position element, need to pass through width and height settings and adjust margin to allow for overlapping*/
+  width:100%;
+  margin-bottom:140px; /* Roughly the height of the controls*/
+}
+a {
+  color:#0061b0;
+  text-decoration:none;
+}
+.pt-previous,
+.pt-next {
+  font-size:1.5em;
+  float:right;
+  margin-left:.5em;
+}
+.pt-play-pause {
+  font-size:2em;
+}
+
+/* Hide/Show */
+.pause-btn,
+.pt-play-pause.pt-playing .play-btn {
+  display:none;
+} 
+.pt-play-pause.pt-playing .pause-btn {
+  display:inline-block;
+}
+.pause-btn {
+  position:relative;
+  left:-4px;
+  top:-3px;
+  letter-spacing:-.005em;
+}
+.pt-scrubber {
+  margin-bottom: 0.5em;
+  margin-top: 1em;
+}
+.pt-scrubber .pt-statusbar {
+  height: 0.3em;
+  position: relative;
+  border-right:solid 1px #CCC;
+  border-bottom:solid 1px #CCC;
+  border-top:solid 1px #DCDCDC;
+  border-left:solid 1px #DCDCDC;
+  border-radius:1em;
+  background:#F9F9F9;
+}
+.pt-scrubber.dragging .pt-statusbar {
+  cursor: grabbing;
+  cursor:-webkit-grabbing;
+}
+.pt-scrubber .pt-statusbar .pt-position,
+.pt-scrubber .pt-statusbar .pt-loading {
+  position: absolute;    
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius:1em;
+  width:0;
+}
+.pt-scrubber .pt-statusbar .pt-position {
+  background-color: #666666;
+  position:relative;
+}
+.pt-scrubber .pt-statusbar .pt-loading {
+  background-color:#F1F1F1;
+}
+.pt-scrubber .pt-statusbar .pt-handle {
+  position:absolute;
+  width:.75em;
+  height:.75em;
+  right:-1em; /* Half of width */
+  top:-.35em; /* Slightly less than half of height*/
+  border-radius:50%;
+  background:#FDFDFD;
+  border:double 3px #AAA;
+  transition:  all .1s;
+  cursor: pointer;
+}
+.pt-time {
+  float:right;
+  font-size:.7em;
+}
+.pt-current-track-title {
+  color:#DDD;
+  font-size:1.7em;
+  margin-top:-.5em;
+}
+.links {
+  clear:both;
+  margin:0;
+  padding:0;
+  list-style-type:none;
+  font-size:1.1em;
+}
+.links a {
+  display:block;
+  padding:1em;
+  border-bottom:solid 1px #EEE;
+}
+.links li.last a {
+  border-bottom:none;
+}
+.links a:hover,
+.links a.pt-playing, 
+.links a.pt-paused {
+  background:#FBFBEF;
+}
+.pt-link.pt-loading { opacity:.2;}
+.pt-link.pt-playing { opacity: 1; font-weight:bold;}
+.pt-link.pt-paused  { opacity:.5; font-weight:bold;}
+.pt-link.pt-cue { color:red;}
+
+/** Not sure if loading in Font Awesome icons this way will break in certain
+  *  browsers, but going for it.
+  *  See: http://fortawesome.github.io/Font-Awesome/cheatsheet
+  */
+.pt-link:before {
+  font-family:FontAwesome;
+  content: '\f04b ';
+  padding-right:.3em;
+  padding-left:.5em;
+}
+.pt-link.pt-playing:before {
+  font-family:FontAwesome;
+  content: '\f04c ';
+  padding-right:.3em;
+  padding-left:.5em;
+}
+.pt-link.pt-buffering:before {
+  font-family:FontAwesome;
+  content: '\f04c ';
+  padding-right:.3em; 
+  padding-left:.5em; 
+}
+
+.pt-controls-markup {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:96%;
+  padding:1% 2%;
+  border-top:solid 1px #EEE;
+  background:rgba(0,0,0,.9);
+  color:#FFF;
+}
+
+.filler {
+  line-height:1.7em;
+}

@@ -1,0 +1,175 @@
+﻿
+body {
+  font-family: 'Open Sans', sans-serif;
+  line-height:1.4em;
+  margin:0;
+  padding:0;
+}
+a {
+  color:#0061b0;
+  text-decoration:none;
+}
+.pt-previous,
+.pt-next {
+  color:#FFF;
+}
+.next-wrapper,
+.previous-wrapper {
+  font-size:3em;
+  position:absolute;
+  color:#FFF;
+  background:rgba(0, 0, 0, .8);
+  padding:20px 40px;
+}
+
+.next-wrapper {
+  right:0;
+  bottom:0;
+}
+.previous-wrapper {
+  left:0;
+  bottom:0;
+}
+
+.pt-play-pause {
+  font-size:2em;
+}
+
+/* Hide/Show */
+.pause-btn,
+.pt-play-pause.pt-playing .play-btn {
+  display:none;
+} 
+.pt-play-pause.pt-playing .pause-btn {
+  display:inline-block;
+}
+.pause-btn {
+
+}
+.pt-scrubber {
+  clear:both;
+  position:relative;
+  font-size:3em;
+  width:75%;
+  margin:1em auto;
+}
+.pt-scrubber .pt-statusbar {
+  height: 0.3em;
+  position: relative;
+  border-right:solid 1px #CCC;
+  border-bottom:solid 1px #CCC;
+  border-top:solid 1px #DCDCDC;
+  border-left:solid 1px #DCDCDC;
+  border-radius:1em;
+  background:#F9F9F9;
+}
+.pt-scrubber.dragging .pt-statusbar {
+  cursor: grabbing;
+  cursor:-webkit-grabbing;
+}
+.pt-scrubber .pt-statusbar .pt-position,
+.pt-scrubber .pt-statusbar .pt-loading {
+  position: absolute;    
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius:1em;
+  width:0;
+}
+.pt-scrubber .pt-statusbar .pt-position {
+  background-color: #666666;
+  position:relative;
+}
+.pt-scrubber .pt-statusbar .pt-loading {
+  background-color:#F1F1F1;
+}
+.pt-scrubber .pt-statusbar .pt-handle {
+  position:absolute;
+  width:.75em;
+  height:.75em;
+  right:-.8em; /* Half of width */
+  top:-.3em; /* Slightly less than half of height*/
+  border-radius:50%;
+  background:#FDFDFD;
+  border:double 3px #AAA;
+  transition:  all .1s;
+  cursor: pointer;
+}
+.pt-time {
+  text-align:center;
+  font-size:4em;
+
+}
+.pt-current-track-title {
+  position:absolute;
+  right:0;
+  top:0;
+  color:#EEE;
+  padding:10px;
+  background:rgba(0,0,0, .7);
+}
+.links {
+  clear:both;
+  margin:0;
+  padding:0;
+  list-style-type:none;
+  font-size:1.1em;
+}
+.links a {
+  display:block;
+  padding:1em;
+  border-bottom:solid 1px #EEE;
+}
+.links li.last a {
+  border-bottom:none;
+}
+.links a:hover,
+.links a.pt-playing, 
+.links a.pt-paused {
+  background:#FBFBEF;
+}
+.pt-link.pt-loading { opacity:.2;}
+.pt-link.pt-playing { opacity: 1; font-weight:bold;}
+.pt-link.pt-paused  { opacity:.5; font-weight:bold;}
+.pt-link.pt-cue { color:red;}
+
+/** Not sure if loading in Font Awesome icons this way will break in certain
+  *  browsers, but going for it.
+  *  See: http://fortawesome.github.io/Font-Awesome/cheatsheet
+  */
+.pt-link:before {
+  font-family:FontAwesome;
+  content: '\f04b ';
+  padding-right:.5em;
+  padding-left:.5em;
+}
+.pt-link.pt-playing:before {
+  font-family:FontAwesome;
+  content: '\f04c ';
+  padding-right:.5em;
+  padding-left:.5em;
+}
+.pt-link.pt-buffering:before {
+  font-family:FontAwesome;
+  content: '\f04c ';
+  padding-right:.5em; 
+  padding-left:.5em; 
+}
+
+.main-wrapper {
+   margin:0 auto;
+   padding:20px;
+   width:600px;
+}
+
+.play-wrapper {
+  position:Absolute;
+  left:0;
+  top:0;
+  padding:30px;
+  background:rgba(0,0,0,.6);
+}
+.play-wrapper a {
+  color:#FFF;
+  font-size:3em;
+}

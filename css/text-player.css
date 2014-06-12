@@ -1,9 +1,9 @@
 ﻿body {
-  max-width:90%;
-  margin:1em auto;
+  max-width:800px;
+  margin:1em;
   font-family:"Courier New", Courier, monospace;
-  font-size:1.5em;
   line-height:1.4em;
+  font-size:1.2em;
 }
 a {
   color:#0061b0;
@@ -15,7 +15,6 @@ a {
   float:right;
   margin-left:.5em;
 }
-
 .pause-btn,
 .play-btn {
   display:inline-block;
@@ -26,7 +25,6 @@ a {
   position:relative;
   top:2px;
 }
-
 /* Hide/Show */
 .pause-btn,
 .pt-play-pause.pt-playing .play-btn {
@@ -35,14 +33,12 @@ a {
 .pt-play-pause.pt-playing .pause-btn {
   display:inline-block;
 }
-
 .pause-btn {
   position:relative;
   left:-4px;
   top:-3px;
   letter-spacing:-.005em;
 }
-
 .pt-link.pt-loading { opacity:.2;}
 .pt-link.pt-playing { opacity: 1; font-weight:bold;}
 .pt-link.pt-paused  { opacity:.5; font-weight:bold;}
@@ -54,14 +50,12 @@ a {
 .pt-link.pt-playing:before {
   content: '❚❚ ';
 }
-
 .pt-scrubber {
-    margin-bottom: 0.25em;
-    margin-top: 0.25em;
+    margin-bottom: .5em;
+    margin-top: 1em;
     position: relative;
 }
 .pt-scrubber .pt-statusbar {
-
   height: 0.3em;
   position: relative;
   border-right:solid 1px #CCC;
@@ -95,7 +89,7 @@ a {
   position:absolute;
   width:.75em;
   height:.75em;
-  right:-.35em; /* Half of width */
+  right:-1em; /* Half of width */
   top:-.35em; /* Slightly less than half of height*/
   border-radius:50%;
   background:#FDFDFD;
@@ -107,14 +101,15 @@ a {
   float:right;
   font-size:.7em;
 }
-ol.playlist {
+.links {
   clear:both;
-  list-style-type:decimal-leading-zero;
-  margin-left:.5em;
+  margin:0;
+  padding:0;
+  list-style-type:none;
 }
-ol.playlist a {
+.links a {
   display:block;
 }
-ol.playlist a:hover {
+.links a:hover {
   background:#FCFCFC;
 }
