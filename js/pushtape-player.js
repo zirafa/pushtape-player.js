@@ -1,14 +1,15 @@
 /**
- * Pushtape Player: Global Controls
- * --------------------
+ * Pushtape-Player.js
+ * https://github.com/zirafa/pushtape-player.js
+ * -------------------------
  * This player was created as part of the Pushtape (pushtape.com) project to support more flexible music player options.
  *
  * Notes:
  * - This player only binds its behavior to CSS classes. You can provide all the necessary markup, or optionally let the player generate it.
  * - There are individual play/pause controls per link, as well as global playback controls  - pause/play, scrubber, previous/next, and time.
- * - By default, it will grabs all links on a page. You can optionally set a pushtapePlayer.config.containerClass to limit the scope.
- * - Track index for links on a page are marked with a data-pushtape-index attribute.
- * - 
+ * - By default, it will grabs all links on a page. You can optionally set a pushtapePlayer.config.containerClass to limit the scope, or
+ *   set pushtapePlayer.config.linkClass to add links with a given class.
+ * - Track index for links on a page are marked and referenced with a data-pushtape-index HTML attribute.
  *
  * Requires SoundManager 2 Javascript API.
  * http://schillmania.com/projects/soundmanager2/
@@ -31,16 +32,37 @@ function PushtapePlayer () {
       isTouchDevice = (ua.match(/ipad|ipod|iphone/i)),
       cleanup;
 
+  // Controls Template. You can override this before init() if you need to, or just set
+  // config.addControlsMarkup.enabled = false and add this manually as HTML.
+  this.defaultControlsMarkup = [
+          '<div class="pt-controls">',
+            '<a class="pt-play-pause" href="#" title="Play/Pause"><span class="play-btn">▶</span><span class="pause-btn">❚❚</span></a>',
+            '<a class="pt-next" href="#" title="Next"> &raquo;</a>',
+            '<a class="pt-previous" href="#" title="Previous">&laquo; </a>',
+            '<span class="pt-current-track-title"></span>',
+            '<div class="pt-scrubber">',
+              '<div class="pt-statusbar">', 
+                '<div class="pt-loading"></div>',  
+                '<div class="pt-position"><div class="pt-handle"></div></div>',  
+              '</div>',
+            '</div>',
+            '<div class="pt-time">',
+              '<span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>',
+            '</div>',
+          '</div>'
+        ].join('\n');
+
   this.config = {
     playNext: true, // stop after one sound, or play through list until end
     autoPlay: false,  // start playing the first sound right away
     repeatAll: false, // repeat playlist after last track
     containerClass : '', // By default, we scan *all* links on the page. If set, limits the scope of search inside containerClass
+    linkClass : '', // By default, add all links we find. If set, will only add links with this class
     addControlsMarkup: {
-      'enabled' : false, 
-      'controlsMarkupClass' :'pt-controls-markup', // wrapper class
-      'position' : 'top' // top or bottom
-    } // if enabled =  false (you manually provide controls markup in HTML doc), otherwise set to true and it will be dynamically inserted into controlsContainerClass.
+      'enabled' : false, // If true, will dynamically insert defaultControlsMarkup, otherwise tries to find markup in DOM
+      'controlsMarkupClass' :'pt-controls-wrapper', // Wrapper class target for markup
+      'position' : 'top' // Add controls to the top or bottom of the document (or containerClass)
+    }
   }
 
   this.controls = {
@@ -63,7 +85,7 @@ function PushtapePlayer () {
     totalTime: null,
     trackTitle: null
   };
-
+  
   this.playableClass = 'pt-playable'; // CSS class for forcing a link to be playable (eg. doesn't have .MP3 in it)
   this.excludeClass = 'pt-exclude'; // CSS class for ignoring MP3 links
   this.cueClass = 'pt-cue'; // CSS class for adding track to end of playlist
@@ -649,7 +671,6 @@ function PushtapePlayer () {
     
     sm._writeDebug('pushtapePlayer.init()');
     
-
     // Default behavior is to scan the entire HTML document for playable links   
     var container = document; 
 
@@ -664,15 +685,18 @@ function PushtapePlayer () {
     var foundItems = 0;
     for (var i = 0; i < oLinks.length; i++) {
       if ((sm.canPlayLink(oLinks[i]) || self.hasClass(oLinks[i],self.playableClass)) && !self.hasClass(oLinks[i],self.excludeClass) && !self.hasClass(oLinks[i], self.cueClass)) {
-        self.addClass(oLinks[i], self.css.sDefault); // add default CSS decoration
-        self.links[foundItems] = oLinks[i];
-        /**
-          * Use a unique HTML data-attribute to relate each link to appropriate sound index.
-          * When link is clicked, we use this to play the right sound - without it, we'd have 
-          * to rely on something less reliable like the URL (which fails if there are duplicates).
-          */
-        oLinks[i].setAttribute('data-pushtape-index', foundItems); 
-        foundItems++;
+        // If linkClass is not set, add all links found, otherwise only add links with the linkClass
+        if (self.config.linkClass.length <= 0 || self.hasClass(oLinks[i], self.config.linkClass)) {
+          self.addClass(oLinks[i], self.css.sDefault); // add default CSS decoration
+          self.links[foundItems] = oLinks[i];
+          /**
+            * Use a unique HTML data-attribute to relate each link to appropriate sound index.
+            * When link is clicked, we use this to play the right sound - without it, we'd have 
+            * to rely on something less reliable like the URL (which fails if there are duplicates).
+            */
+          oLinks[i].setAttribute('data-pushtape-index', foundItems); 
+          foundItems++;
+        }
       }
     }
     
@@ -742,24 +766,9 @@ function PushtapePlayer () {
       }
 
       if (controlsMarkup != null) {
-        // If you really need to manipulate this, just disable addControlsMarkup and manually add the markup in your HTML.
-        controlsMarkup.innerHTML = [
-          '<div class="pt-controls">',
-            '<a class="pt-play-pause" href="#" title="Play/Pause"><span class="play-btn">▶</span><span class="pause-btn">❚❚</span></a>',
-            '<a class="pt-next" href="#" title="Next"> &raquo;</a>',
-            '<a class="pt-previous" href="#" title="Previous">&laquo; </a>',
-            '<span class="pt-current-track-title"></span>',
-            '<div class="pt-scrubber">',
-              '<div class="pt-statusbar">', 
-                '<div class="pt-loading"></div>',  
-                '<div class="pt-position"><div class="pt-handle"></div></div>',  
-              '</div>',
-            '</div>',
-            '<div class="pt-time">',
-              '<span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>',
-            '</div>',
-          '</div>'
-        ].join('\n');
+        // If you really need to manipulate the markup, just disable addControlsMarkup and manually add the markup in your HTML.
+        // You could also override self.defaultControlsMarkup before init(); if you want to keep everything in JS
+        controlsMarkup.innerHTML = self.defaultControlsMarkup;
       }
     }
 

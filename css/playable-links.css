@@ -136,7 +136,7 @@ a {
   padding-left:.3em; 
 }
 
-.pt-controls-markup {
+.pt-controls-wrapper {
   position:fixed;
   bottom:0;
   left:0;

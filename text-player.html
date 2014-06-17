@@ -27,9 +27,10 @@ soundManager.setup({
       autoPlay: false,  // start playing the first sound right away
       repeatAll: false, // repeat playlist after last track
       containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+      linkClass : '', // By default, add all links we find. If set, will only add links with this class 
       addControlsMarkup: {
         'enabled' : true, 
-        'controlsMarkupClass' :'pt-controls-markup',
+        'controlsMarkupClass' :'pt-controls-wrapper',
         'position' : 'top'
       } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
     }
@@ -55,10 +56,10 @@ soundManager.setup({
   <div class="pt-playlist">
     <!-- CONTROLS MARKUP DYNAMICALLY ADDED TO THE TOP OF .PT-PLAYLIST. -->    
     <ul class="links">
-      <li><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>
+      <li><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3" class="pt-audio">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>
       <li><a href="audio/118935__dobroide__20110423-night-chorus_0.mp3" title="Night Chorus of birds...">Night Chorus - dobroide</a></li>  
       <li><a href="audio/104483__soundbytez__desert-aviary02.mp3">Desert Aviary - Soundbytez</a></li>  
-      <li><a href="audio/5 Crunchy Space.mp3">Crunchy Space - Arthur Hamidi</a></li>
+      <li><a href="audio/5 Crunchy Space.mp3" class="pt-link">Crunchy Space - Arthur Hamidi</a></li>
     </ul>
   </div>
 

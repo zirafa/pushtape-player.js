@@ -29,9 +29,10 @@ soundManager.setup({
       autoPlay: false,  // start playing the first sound right away
       repeatAll: false, // repeat playlist after last track
       containerClass : '', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+      linkClass : '', // By default, add all links we find. If set, will only add links with this class 
       addControlsMarkup: {
         'enabled' : false, 
-        'controlsMarkupClass' :'pt-controls-markup',
+        'controlsMarkupClass' :'pt-controls-wrapper',
         'position' : 'top'
       } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
     }
@@ -62,7 +63,7 @@ soundManager.setup({
   </ul>
 
   <!-- Just some filler text to make the page scroll. Also demonstrates an inline audio link -->
-  <h2>Filler text with inline links</h2>
+  <h2>Example text with inline links</h2>
   <div class="filler">
     <p>
     Ahab's harpoon, the one forged at Perth's fire, remained firmly lashed in its conspicuous crotch, so that it projected beyond his <a href="https://ia600406.us.archive.org/15/items/KillerWhaleorcinusOrcaSoundsVocalizations/killer_whale.mp3" title="Killer whale sounds">whale-boat's bow</a>; but the sea that had stove its bottom had caused the loose leather sheath to drop off; and from the keen steel barb there now came a levelled flame of pale, forked fire. As the silent harpoon burned there like a serpent's tongue, Starbuck grasped Ahab by the arm—"God, God is against thee, old man; forbear! 'tis an ill voyage! ill begun, ill continued; let me square the yards, while we may, old man, and make a fair wind of it homewards, to go on a better voyage than this."
@@ -81,7 +82,7 @@ soundManager.setup({
 
 
   <!-- CONTROLS MARKUP MANUALLY ADDED HERE FOR GREATER CONTROL. -->    
-  <div class="pt-controls-markup">
+  <div class="pt-controls-wrapper">
       <div class="pt-controls">
         <a class="pt-play-pause" href="#" title="Play/Pause">
           <span class="play-btn"><i class="fa fa-play"></i></span>

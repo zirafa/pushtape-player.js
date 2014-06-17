@@ -77,7 +77,7 @@ a {
   width:.75em;
   height:.75em;
   right:-1em; /* Half of width */
-  top:-.35em; /* Slightly less than half of height*/
+  top:-.4em; /* Slightly less than half of height*/
   border-radius:50%;
   background:#FDFDFD;
   border:double 3px #AAA;
@@ -141,7 +141,7 @@ a {
   padding-left:.5em; 
 }
 
-.pt-controls-markup {
+.pt-controls-wrapper {
   position:fixed;
   bottom:0;
   left:0;
