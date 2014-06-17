@@ -47,17 +47,18 @@ Please visit http://pushtape.com/pushtape-player for examples of how this player
           autoPlay: false,  // start playing the first sound right away
           repeatAll: false, // repeat playlist after last track
           containerClass : '', // Default is to scan entire page for links, if set will scan only inside containerClass
+          linkClass : '', // Default will add all audio links found. If set to pushtape-player, will only add audio links that have the class, i.e. <a class="pushtape-player" href="file.mp3"></a>
           addControlsMarkup: { 
             'enabled' : false, // Default is false. If true, global controls markup is inserted inside of containerClass
-            'controlsMarkupClass' :'pt-controls-markup', // wrapper class
-            'position' : 'top' // Control where controls markup is inserted
+            'controlsMarkupClass' :'pt-controls-wrapper', // Wrapper class
+            'position' : 'top' // Position the controls inside the top or bottom of the document or containerClass
           }
         }
   
 
 #Style options
-One of the design goals of this player was to make it extremely flexible to modify the look and feel of the global controls. The markup for the global controls can be dynamically inserted or manually inserted (see config.addControlsMarkup above). You can use plain CSS to position and style the global controls however you'd like, and each audio link on the page is given special classes (.pt-link, .pt-playing, etc). I tried not to force or inject styles with javascript as much as possible, however in certain places it does happen (setting % width for .pt-position and .pt-loading, for instance).
-
+One of the design goals of this player was to make it extremely flexible to modify the look and feel of the global controls. You can use plain CSS to position and style the global controls however you'd like, and each audio link on the page is given special classes (.pt-link, .pt-playing, etc). I tried not to force or inject styles with javascript as much as possible, however in certain places it does happen (setting % width for .pt-position and .pt-loading, for instance).
+You can add markup for the global controls on the page, or choose to use the default markup provided. (see config.addControlsMarkup above). 
 
 ## Default global control classes
 - .pt-play-pause (this will also get link state classes)

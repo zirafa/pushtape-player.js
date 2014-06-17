@@ -5,10 +5,10 @@
  * This player was created as part of the Pushtape (pushtape.com) project to support more flexible music player options.
  *
  * Notes:
- * - This player only binds its behavior to CSS classes. You can provide all the necessary markup, or optionally let the player generate it.
+ * - This player only binds its behavior to CSS classes. You can provide all the necessary controls markup, or optionally let the player generate it.
  * - There are individual play/pause controls per link, as well as global playback controls  - pause/play, scrubber, previous/next, and time.
  * - By default, it will grabs all links on a page. You can optionally set a pushtapePlayer.config.containerClass to limit the scope, or
- *   set pushtapePlayer.config.linkClass to add links with a given class.
+ *   set pushtapePlayer.config.linkClass to only add links with a given class.
  * - Track index for links on a page are marked and referenced with a data-pushtape-index HTML attribute.
  *
  * Requires SoundManager 2 Javascript API.
@@ -56,12 +56,12 @@ function PushtapePlayer () {
     playNext: true, // stop after one sound, or play through list until end
     autoPlay: false,  // start playing the first sound right away
     repeatAll: false, // repeat playlist after last track
-    containerClass : '', // By default, we scan *all* links on the page. If set, limits the scope of search inside containerClass
-    linkClass : '', // By default, add all links we find. If set, will only add links with this class
-    addControlsMarkup: {
-      'enabled' : false, // If true, will dynamically insert defaultControlsMarkup, otherwise tries to find markup in DOM
-      'controlsMarkupClass' :'pt-controls-wrapper', // Wrapper class target for markup
-      'position' : 'top' // Add controls to the top or bottom of the document (or containerClass)
+    containerClass : '', // Default is to scan entire page for links, if set will scan only inside containerClass
+    linkClass : '', // Default will add all audio links found. If set (i.e. pushtape-player), will only add audio links that have the class: <a class="pushtape-player" href="file.mp3"></a>
+    addControlsMarkup: { 
+      'enabled' : false, // Default is false. If true, global controls markup is inserted inside of containerClass
+      'controlsMarkupClass' :'pt-controls-wrapper', // Wrapper class
+      'position' : 'top' // Position the controls inside the top or bottom of the document or containerClass
     }
   }
 
