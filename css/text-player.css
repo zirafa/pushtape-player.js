@@ -56,13 +56,12 @@ a {
     position: relative;
 }
 .pt-scrubber .pt-statusbar {
-  height: 0.3em;
+  height: 0.5em;
   position: relative;
   border-right:solid 1px #CCC;
   border-bottom:solid 1px #CCC;
   border-top:solid 1px #DCDCDC;
   border-left:solid 1px #DCDCDC;
-  border-radius:1em;
   background:#F9F9F9;
 }
 .pt-scrubber.dragging .pt-statusbar {
@@ -75,7 +74,6 @@ a {
   height: 100%;
   left: 0;
   top: 0;
-  border-radius:1em;
   width:0;
 }
 .pt-scrubber .pt-statusbar .pt-position {
@@ -87,13 +85,12 @@ a {
 }
 .pt-scrubber .pt-statusbar .pt-handle {
   position:absolute;
-  width:.75em;
-  height:.75em;
-  right:-1em; /* Half of width */
-  top:-.35em; /* Slightly less than half of height*/
-  border-radius:50%;
+  width:1.5em;
+  height:.85em;
+  right:-1.5em; /* Half of width */
+  top:-.24em; /* Slightly less than half of height*/
   background:#FDFDFD;
-  border:double 3px #AAA;
+  border:solid 1px #999;
   transition:  all .1s;
   cursor: pointer;
 }
