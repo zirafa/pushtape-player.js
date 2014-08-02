@@ -549,6 +549,10 @@ function PushtapePlayer () {
     if (!o.href || (!sm.canPlayLink(o) && !self.hasClass(o,self.playableClass)) || self.hasClass(o,self.excludeClass)) {
       return true; // pass-thru for non-MP3/non-links
     }
+    // Prevent duplicate links of same link but outside of scope from firing
+    if (!o.getAttribute('data-pushtape-index')) {
+      return true;
+    }
     var soundURL = o.href;
     var soundIndex = Number(o.getAttribute('data-pushtape-index'));
     var thisSound = self.getSoundByIndex(soundIndex);
