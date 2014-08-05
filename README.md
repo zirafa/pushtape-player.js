@@ -31,13 +31,13 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
           playNext: true, // stop after one sound, or play through list until end
           autoPlay: false,  // start playing the first sound right away
           repeatAll: false, // repeat playlist after last track
-          containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
-          linkClass : '', // By default, add all links we find. If set, will only add links with this class 
+          containerClass : '', // If empty, scan entire page for audio links. If set, limits the scope of search inside containerClass
+          linkClass : '', // By default, add all links found. If set, will only add links with this class 
           addControlsMarkup: {
-            'enabled' : true, 
+            'enabled' : false, 
             'controlsMarkupClass' :'pt-controls-wrapper',
             'position' : 'top'
-          } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
+          } // If enabled =  false (the default) you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
         });
       },
       ontimeout: function() {
