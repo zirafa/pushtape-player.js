@@ -27,12 +27,18 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
       onready: function() {
         // Initialize pushtape player when SM2 is ready
         pushtapePlayer = new PushtapePlayer();
-        pushtapePlayer.config = {
+        pushtapePlayer.init({
           playNext: true, // stop after one sound, or play through list until end
           autoPlay: false,  // start playing the first sound right away
-          repeatAll: false // repeat playlist after last track
-        }
-        pushtapePlayer.init();
+          repeatAll: false, // repeat playlist after last track
+          containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+          linkClass : '', // By default, add all links we find. If set, will only add links with this class 
+          addControlsMarkup: {
+            'enabled' : true, 
+            'controlsMarkupClass' :'pt-controls-wrapper',
+            'position' : 'top'
+          } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
+        });
       },
       ontimeout: function() {
         // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
@@ -42,20 +48,17 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
 
 
 #Config options
-        pushtapePlayer.config = {
-          playNext: true, // stop after one sound, or play through list until end
-          autoPlay: false,  // start playing the first sound right away
-          repeatAll: false, // repeat playlist after last track
-          containerClass : '', // Default is to scan entire page for links, if set will scan only inside containerClass
-          linkClass : '', // Default will add all audio links found. If set to pushtape-player, will only add audio links that have the class, i.e. <a class="pushtape-player" href="file.mp3"></a>
-          addControlsMarkup: { 
-            'enabled' : false, // Default is false. If true, global controls markup is inserted inside of containerClass
-            'controlsMarkupClass' :'pt-controls-wrapper', // Wrapper class
-            'position' : 'top' // Position the controls inside the top or bottom of the document or containerClass
-          }
-        }
+Option  | Type | Default | Description
+------- | ---- | ------- | -----------
+playNext  | boolean | true  | stop after one sound, or play through list until end
+autoPlay  | boolean | false | start playing the first sound right away
+repeatAll | boolean | false | repeat playlist from beginning after last track
+containerClass | string | '' | Empty default scans entire page for links, if set will scan only inside containerClass
+linkClass | string | '' | Empty default will add all audio links found. If set to pushtape-player, will only add audio links that have the class, i.e. <a class="pushtape-player" href="file.mp3"></a>
+addControlsMarkup.enabled | boolean | false | If true, global controls markup is dynamically inserted inside of containerClass
+addControlsMarkup.controlsMarkupClass | string | 'pt-controls-wrapper' | Wrapper class 
+addControlsMarkup.position | string | 'top' | Position the controls inside the top or bottom of the document or containerClass
   
-
 #Style options
 One of the design goals of this player was to make it extremely flexible to modify the look and feel of the global controls. You can use plain CSS to position and style the global controls however you'd like, and each audio link on the page is given special classes (.pt-link, .pt-playing, etc). I tried not to force or inject styles with javascript as much as possible, however in certain places it does happen (setting % width for .pt-position and .pt-loading, for instance).
 You can add markup for the global controls on the page, or choose to use the default markup provided. (see config.addControlsMarkup above). 
@@ -83,11 +86,11 @@ You can add markup for the global controls on the page, or choose to use the def
           <div class="pt-controls-markup">
             <div class="pt-controls">
               <a class="pt-play-pause" href="#" title="Play/Pause">
-                <span class="play-btn">▶</span>
-                <span class="pause-btn">❚❚</span>
+                <span class="play-btn"><span class="pt-play-icon">▶</span></span>
+                <span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span>
               </a>
-              <a class="pt-next" href="#" title="Next"> &raquo;</a>
-              <a class="pt-previous" href="#" title="Previous">&laquo; </a>
+              <a class="pt-next" href="#" title="Next"> <span class="pt-next-icon">&raquo;</span></a>
+              <a class="pt-previous" href="#" title="Previous"><span class="pt-previous-icon">&laquo;</span> </a>
               <span class="pt-current-track-title"></span>
           
               <div class="pt-scrubber">

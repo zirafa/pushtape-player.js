@@ -36,9 +36,9 @@ function PushtapePlayer () {
   // config.addControlsMarkup.enabled = false and add this manually as HTML.
   this.defaultControlsMarkup = [
           '<div class="pt-controls">',
-            '<a class="pt-play-pause" href="#" title="Play/Pause"><span class="play-btn">▶</span><span class="pause-btn">❚❚</span></a>',
-            '<a class="pt-next" href="#" title="Next"> &raquo;</a>',
-            '<a class="pt-previous" href="#" title="Previous">&laquo; </a>',
+            '<a class="pt-play-pause" href="#" title="Play/Pause"><span class="play-btn"><span class="pt-play-icon">▶</span></span><span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span></a>',
+            '<a class="pt-next" href="#" title="Next"> <span class="pt-next-icon">&raquo;</span></a>',
+            '<a class="pt-previous" href="#" title="Previous"><span class="pt-previous-icon">&laquo;</span> </a>',
             '<span class="pt-current-track-title"></span>',
             '<div class="pt-scrubber">',
               '<div class="pt-statusbar">', 
@@ -52,6 +52,7 @@ function PushtapePlayer () {
           '</div>'
         ].join('\n');
 
+  // This gets setup below in init()...remove this?
   this.config = {
     playNext: true, // stop after one sound, or play through list until end
     autoPlay: false,  // start playing the first sound right away
@@ -82,7 +83,11 @@ function PushtapePlayer () {
     nextButton: null,
     previousButton: null,
     currentTime: null,
-    totalTime: null,
+    duration: null,
+    statusBar: null,
+    loading: null,
+    position: null,
+    scrubber: null,
     trackTitle: null
   };
   
@@ -669,15 +674,31 @@ function PushtapePlayer () {
     }
     return false;
   }
-  
+
+
   // Initialize the player. 
-  this.init = function() {
+  this.init = function(options) {
+
+    // Allow options arguments to override config defaults
+    if (options) {
+      self.config = {
+        playNext: options.playNext === false ? false : true, // stop after one sound, or play through list until end
+        autoPlay: options.autoPlay === true ? true : false,  // start playing the first sound right away
+        repeatAll: options.repeatAll === true ? true : false, // repeat playlist after last track
+        containerClass : options.containerClass || '', // Default is to scan entire page for links, if set will scan only inside containerClass
+        linkClass : options.linkClass || '', // Default will add all audio links found. If set (i.e. pushtape-player), will only add audio links that have the class: <a class="pushtape-player" href="file.mp3"></a>
+        addControlsMarkup: { 
+          'enabled' : options.addControlsMarkup && options.addControlsMarkup.enabled === true ? true : false, // Default is false. If true, global controls markup is inserted inside of containerClass
+          'controlsMarkupClass' : options.addControlsMarkup && options.addControlsMarkup.controlsMarkupClass || 'pt-controls-wrapper', // Wrapper class
+          'position' : options.addControlsMarkup && options.addControlsMarkup.position || 'top' // Position the controls inside the top or bottom of the document or containerClass
+        }
+      }
+    }
     
     sm._writeDebug('pushtapePlayer.init()');
     
     // Default behavior is to scan the entire HTML document for playable links   
     var container = document; 
-
     // If a containerClass class is set, limit the playlist scope to that class. 
     if (self.config.containerClass.length > 0) {
       container = document.getElementsByClassName(self.config.containerClass)[0];
@@ -703,6 +724,8 @@ function PushtapePlayer () {
         }
       }
     }
+    // Expose the number of items found (same as self.links.length);
+    self.foundItems = foundItems; 
     
     /* Bind events (clicks, drags, mouseDown)*/
     function doEvents(action) { // action: add / remove
@@ -735,7 +758,7 @@ function PushtapePlayer () {
      *  control markup in HTML yourself (i.e. allowing you to radically alter positioning of things)
      *  If addControlsMarkup = true, it will insert HTML into the top/bottom (addControlsMarkup.position) of the playlist scope
      */
-    if (self.config.addControlsMarkup.enabled) {
+    if (self.config.addControlsMarkup.enabled && foundItems > 0) {
       sm._writeDebug('Attempting to add controls markup using class: ' + self.config.addControlsMarkup.controlsMarkupClass);
       var controlsMarkup = null;
       var controlsEl = document.getElementsByClassName(self.config.addControlsMarkup.controlsMarkupClass)[0];
@@ -776,22 +799,39 @@ function PushtapePlayer () {
       }
     }
 
-    // Initialize the global controls...this can probably be optimized, but it's intentionally verbose.
+    // Initialize the global controls...this can probably be optimized, but it's also supposed to be kinda verbose.
     self.controls.playButton = document.getElementsByClassName(self.controls.playButtonClass)[0];
     self.controls.nextButton = document.getElementsByClassName(self.controls.nextButtonClass)[0];
     self.controls.previousButton = document.getElementsByClassName(self.controls.previousButtonClass)[0];  
     self.controls.currentTime = document.getElementsByClassName(self.controls.currentTimeClass)[0];  
     self.controls.duration = document.getElementsByClassName(self.controls.durationClass)[0];  
-    self.controls.statusbar = document.getElementsByClassName(self.controls.stausBarClass)[0];  
+    self.controls.statusBar = document.getElementsByClassName(self.controls.statusBarClass)[0];  
     self.controls.loading = document.getElementsByClassName(self.controls.loadingClass)[0];  
     self.controls.position = document.getElementsByClassName(self.controls.positionClass)[0];  
     self.controls.scrubber = document.getElementsByClassName(self.controls.scrubberClass)[0];  
     self.controls.trackTitle = document.getElementsByClassName(self.controls.trackTitleClass)[0];  
     
+    // TODO: iterate instead of being so explicit.
+    // Hide the global control elements if no items found.
+    /* This is too buggy atm...probably just let invoking script handle this.
+    if (foundItems == 0) {
+      self.controls.playButton.style.display = 'none';
+      self.controls.nextButton.style.display = 'none';
+      self.controls.previousButton.style.display = 'none';
+      self.controls.currentTime.style.display = 'none';
+      self.controls.duration.style.display = 'none';
+      self.controls.statusBar.style.display = 'none';
+      self.controls.loading.style.display = 'none';
+      self.controls.position.style.display = 'none';
+      self.controls.scrubber.style.display = 'none';
+      self.controls.trackTitle.style.display = 'none';
+    }
+    */
+
     // Global control bindings...check for nulls in case these elements don't exist.
-    if (self.controls.playButton != null) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
-    if (self.controls.nextButton != null) { _event['add'](self.controls.nextButton,'click',self.globalNext);}
-    if (self.controls.previousButton != null) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
+    if (self.controls.playButton != null && foundItems > 0) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
+    if (self.controls.nextButton != null && foundItems > 0) { _event['add'](self.controls.nextButton,'click',self.globalNext);}
+    if (self.controls.previousButton != null && foundItems > 0) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
 
     if (foundItems > 0) {
       // Add click listener

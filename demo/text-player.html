@@ -23,7 +23,7 @@ soundManager.setup({
   onready: function() {
     // Initialize pushtape player when SM2 is ready
     pushtapePlayer = new PushtapePlayer();
-    pushtapePlayer.config = {
+    pushtapePlayer.init({
       playNext: true, // stop after one sound, or play through list until end
       autoPlay: false,  // start playing the first sound right away
       repeatAll: false, // repeat playlist after last track
@@ -34,8 +34,7 @@ soundManager.setup({
         'controlsMarkupClass' :'pt-controls-wrapper',
         'position' : 'top'
       } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
-    }
-    pushtapePlayer.init();
+    });
   },
   ontimeout: function() {
     // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
