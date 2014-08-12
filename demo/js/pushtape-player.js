@@ -822,7 +822,7 @@ function PushtapePlayer () {
       // Depends on .pt-hide { display:none; } to be defined in CSS.
       var pt_controls;
       pt_controls = document.getElementsByClassName('pt-hide');
-      console.log(pt_controls);
+
       if (pt_controls != null && pt_controls.length >= 1) {
         for(i=0; i < pt_controls.length; i++) {
           self.removeClass(pt_controls[i], 'pt-hide');
