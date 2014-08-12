@@ -149,12 +149,6 @@ a {
   padding-right:.5em;
   padding-left:.5em;
 }
-.pt-link.pt-buffering:before {
-  font-family:FontAwesome;
-  content: '\f04c ';
-  padding-right:.5em; 
-  padding-left:.5em; 
-}
 
 .main-wrapper {
    margin:0 auto;
@@ -172,4 +166,28 @@ a {
 .play-wrapper a {
   color:#FFF;
   font-size:3em;
+}
+
+.pt-play-pause.pt-buffering,
+.pt-link.pt-buffering {
+  -webkit-animation: buffering 1.4s infinite;
+  animation:  buffering 1.4s infinite;
+}
+
+/* Utility class to hide elements if no links found on page load */
+.pt-hide {
+  display:none;
+}
+
+/* Buffering animation */
+@-webkit-keyframes buffering {
+  0%   { opacity:1; }
+  50%   { opacity:.2; }
+  100% { opacity:1; }
+}
+
+@keyframes buffering {
+  0%   { opacity:1; }
+  50% { opacity:.2; }
+  100% { opacity:1; }
 }

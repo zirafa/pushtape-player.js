@@ -82,9 +82,12 @@ You can add markup for the global controls on the page, or choose to use the def
 - .pt-buffering (state: sound is buffering)
 - .pt-paused (state: sound is paused)
 
+## Utility class
+- .pt-hide (If playable links are found, this is removed. Used to hide global controls if no links found. )
+
 ## Default controls markup template
           <div class="pt-controls-markup">
-            <div class="pt-controls">
+            <div class="pt-controls pt-hide">
               <a class="pt-play-pause" href="#" title="Play/Pause">
                 <span class="play-btn"><span class="pt-play-icon">▶</span></span>
                 <span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span>

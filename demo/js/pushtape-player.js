@@ -35,7 +35,7 @@ function PushtapePlayer () {
   // Controls Template. You can override this before init() if you need to, or just set
   // config.addControlsMarkup.enabled = false and add this manually as HTML.
   this.defaultControlsMarkup = [
-          '<div class="pt-controls">',
+          '<div class="pt-controls pt-hide">',
             '<a class="pt-play-pause" href="#" title="Play/Pause"><span class="play-btn"><span class="pt-play-icon">▶</span></span><span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span></a>',
             '<a class="pt-next" href="#" title="Next"> <span class="pt-next-icon">&raquo;</span></a>',
             '<a class="pt-previous" href="#" title="Previous"><span class="pt-previous-icon">&laquo;</span> </a>',
@@ -810,23 +810,6 @@ function PushtapePlayer () {
     self.controls.position = document.getElementsByClassName(self.controls.positionClass)[0];  
     self.controls.scrubber = document.getElementsByClassName(self.controls.scrubberClass)[0];  
     self.controls.trackTitle = document.getElementsByClassName(self.controls.trackTitleClass)[0];  
-    
-    // TODO: iterate instead of being so explicit.
-    // Hide the global control elements if no items found.
-    /* This is too buggy atm...probably just let invoking script handle this.
-    if (foundItems == 0) {
-      self.controls.playButton.style.display = 'none';
-      self.controls.nextButton.style.display = 'none';
-      self.controls.previousButton.style.display = 'none';
-      self.controls.currentTime.style.display = 'none';
-      self.controls.duration.style.display = 'none';
-      self.controls.statusBar.style.display = 'none';
-      self.controls.loading.style.display = 'none';
-      self.controls.position.style.display = 'none';
-      self.controls.scrubber.style.display = 'none';
-      self.controls.trackTitle.style.display = 'none';
-    }
-    */
 
     // Global control bindings...check for nulls in case these elements don't exist.
     if (self.controls.playButton != null && foundItems > 0) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
@@ -834,6 +817,18 @@ function PushtapePlayer () {
     if (self.controls.previousButton != null && foundItems > 0) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
 
     if (foundItems > 0) {
+
+      // Hide/Show the global control element class if no items found.
+      // Depends on .pt-hide { display:none; } to be defined in CSS.
+      var pt_controls;
+      pt_controls = document.getElementsByClassName('pt-hide');
+      console.log(pt_controls);
+      if (pt_controls != null && pt_controls.length >= 1) {
+        for(i=0; i < pt_controls.length; i++) {
+          self.removeClass(pt_controls[i], 'pt-hide');
+        }
+      }
+
       // Add click listener
       _event['add'](document,'click',self.handleClick);
 
