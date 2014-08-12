@@ -3,41 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Pushtape Player :: Fixed Position Controls</title>
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href="css/fixed-position.css" type="text/css" rel="stylesheet">
-<!-- Demo folder includes SM2 script, but you should really grab it from the source: http://www.schillmania.com/projects/soundmanager2/ -->
-<script type="text/javascript" src="js/soundmanager2-jsmin.js"></script>
-<script type="text/javascript" src="js/pushtape-player.js"></script>
-<script type="text/javascript">
-/**
- * Setup the Pushtape Player
- */
-var pushtapePlayer = null; // Instance
-
-soundManager.setup({
-  debugMode: true,   // disable or enable debug output
-  url: 'swf/',       // path to directory containing SM2 SWF
-  useHighPerformance: true, // keep flash on screen, boost performance
-  preferFlash: true, // for visualization effects (smoother scrubber)
-  flashVersion: 9,
-  wmode: 'transparent', // transparent SWF, if possible
-  onready: function() {
-    // Initialize pushtape player when SM2 is ready
-    pushtapePlayer = new PushtapePlayer();
-    pushtapePlayer.init({
-      playNext: true, // stop after one sound, or play through list until end
-      autoPlay: false,  // start playing the first sound right away
-      repeatAll: false, // repeat playlist after last track
-    });
-  },
-  ontimeout: function() {
-    // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
-    console.log('Error initializing the Pushtape player.');
-  }  
-});
-
-</script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href="css/fixed-position.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -96,6 +64,39 @@ soundManager.setup({
         </div>
       </div>
     </div>
+  
+  <!-- Demo folder includes SM2 script, but you should really grab it from the source: http://www.schillmania.com/projects/soundmanager2/ -->
+  <script type="text/javascript" src="js/soundmanager2-jsmin.js"></script>
+  <script type="text/javascript" src="js/pushtape-player.js"></script>
+  <script type="text/javascript">
+  /**
+   * Setup the Pushtape Player
+   */
+  var pushtapePlayer = null; // Instance
+  
+  soundManager.setup({
+    debugMode: true,   // disable or enable debug output
+    url: 'swf/',       // path to directory containing SM2 SWF
+    useHighPerformance: true, // keep flash on screen, boost performance
+    preferFlash: true, // for visualization effects (smoother scrubber)
+    flashVersion: 9,
+    wmode: 'transparent', // transparent SWF, if possible
+    onready: function() {
+      // Initialize pushtape player when SM2 is ready
+      pushtapePlayer = new PushtapePlayer();
+      pushtapePlayer.init({
+        playNext: true, // stop after one sound, or play through list until end
+        autoPlay: false,  // start playing the first sound right away
+        repeatAll: false, // repeat playlist after last track
+      });
+    },
+    ontimeout: function() {
+      // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
+      console.log('Error initializing the Pushtape player.');
+    }  
+  });
+  
+  </script>
 
 </body>
 </html>

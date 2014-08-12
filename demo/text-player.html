@@ -2,48 +2,8 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Pushtape Player :: Text Player</title>
-<link href="css/text-player.css" type="text/css" rel="stylesheet">
-<!-- Demo folder includes SM2 script, but you should really grab it from the source: http://www.schillmania.com/projects/soundmanager2/ -->
-<script type="text/javascript" src="js/soundmanager2-jsmin.js"></script>
-<script type="text/javascript" src="js/pushtape-player.js"></script>
-<script type="text/javascript">
-/**
- * Setup the Pushtape Player
- */
-var pushtapePlayer = null; // Instance
-
-soundManager.setup({
-  debugMode: true,   // disable or enable debug output
-  url: 'swf/',       // path to directory containing SM2 SWF
-  useHighPerformance: true, // keep flash on screen, boost performance
-  preferFlash: true, // for visualization effects (smoother scrubber)
-  flashVersion: 9,
-  wmode: 'transparent', // transparent SWF, if possible
-  onready: function() {
-    // Initialize pushtape player when SM2 is ready
-    pushtapePlayer = new PushtapePlayer();
-    pushtapePlayer.init({
-      playNext: true, // stop after one sound, or play through list until end
-      autoPlay: false,  // start playing the first sound right away
-      repeatAll: false, // repeat playlist after last track
-      containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
-      linkClass : '', // By default, add all links we find. If set, will only add links with this class 
-      addControlsMarkup: {
-        'enabled' : true, 
-        'controlsMarkupClass' :'pt-controls-wrapper',
-        'position' : 'top'
-      } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
-    });
-  },
-  ontimeout: function() {
-    // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
-    console.log('Error initializing the Pushtape player.');
-  }  
-});
-
-</script>
-
+  <title>Pushtape Player :: Text Player</title>
+  <link href="css/text-player.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <h2><a href="index.html">Pushtape Player</a> &raquo; Text Player</h2>
@@ -62,6 +22,46 @@ soundManager.setup({
       <li><a href="audio/5 Crunchy Space.mp3" class="pt-link">Crunchy Space - Arthur Hamidi</a></li>
     </ul>
   </div>
+
+  <!-- Demo folder includes SM2 script, but you should really grab it from the source: http://www.schillmania.com/projects/soundmanager2/ -->
+  <script type="text/javascript" src="js/soundmanager2-jsmin.js"></script>
+  <script type="text/javascript" src="js/pushtape-player.js"></script>
+  <script type="text/javascript">
+  /**
+   * Setup the Pushtape Player
+   */
+  var pushtapePlayer = null; // Instance
+  
+  soundManager.setup({
+    debugMode: true,   // disable or enable debug output
+    url: 'swf/',       // path to directory containing SM2 SWF
+    useHighPerformance: true, // keep flash on screen, boost performance
+    preferFlash: true, // for visualization effects (smoother scrubber)
+    flashVersion: 9,
+    wmode: 'transparent', // transparent SWF, if possible
+    onready: function() {
+      // Initialize pushtape player when SM2 is ready
+      pushtapePlayer = new PushtapePlayer();
+      pushtapePlayer.init({
+        playNext: true, // stop after one sound, or play through list until end
+        autoPlay: false,  // start playing the first sound right away
+        repeatAll: false, // repeat playlist after last track
+        containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+        linkClass : '', // By default, add all links we find. If set, will only add links with this class 
+        addControlsMarkup: {
+          'enabled' : true, 
+          'controlsMarkupClass' :'pt-controls-wrapper',
+          'position' : 'top'
+        } // if enabled =  false you provide all markup in your HTML, otherwise set this to true and it will be dynamically inserted into controlsContainerClass.
+      });
+    },
+    ontimeout: function() {
+      // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
+      console.log('Error initializing the Pushtape player.');
+    }  
+  });
+  
+  </script>
 
 </body>
 </html>

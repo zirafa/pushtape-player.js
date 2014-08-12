@@ -3,99 +3,92 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Pushtape Player :: Exploded Controls</title>
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href="css/exploded-controls.css" type="text/css" rel="stylesheet">
-<!-- Demo folder includes SM2 script, but you should really grab it from the source: http://www.schillmania.com/projects/soundmanager2/ -->
-<script type="text/javascript" src="js/soundmanager2-jsmin.js"></script>
-<script type="text/javascript" src="js/pushtape-player.js"></script>
-<script type="text/javascript">
-/**
- * Setup the Pushtape Player
- */
-var pushtapePlayer = null; // Instance
-
-soundManager.setup({
-  debugMode: true,   // disable or enable debug output
-  url: 'swf/',       // path to directory containing SM2 SWF
-  useHighPerformance: true, // keep flash on screen, boost performance
-  preferFlash: true, // for visualization effects (smoother scrubber)
-  flashVersion: 9,
-  wmode: 'transparent', // transparent SWF, if possible
-  onready: function() {
-    // Initialize pushtape player when SM2 is ready
-    pushtapePlayer = new PushtapePlayer();
-    pushtapePlayer.init({
-      playNext: true, // stop after one sound, or play through list until end
-      autoPlay: false,  // start playing the first sound right away
-      repeatAll: false, // repeat playlist after last track
-      containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
-    });
-  },
-  ontimeout: function() {
-    // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
-    console.log('Error initializing the Pushtape player.');
-  }  
-});
-
-</script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" type="text/css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href="css/exploded-controls.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
-<div class="play-wrapper pt-hide">
-  <a class="pt-play-pause" href="#" title="Play/Pause">
-    <span class="play-btn"><i class="fa fa-play"></i></span>
-    <span class="pause-btn"><i class="fa fa-pause"></i></span>
-  </a>
-</div>
 
-<div class="main-wrapper">
-  <h2><a href="index.html">Pushtape Player</a> &raquo; Exploded Controls</h2>
-  <p>
-  This example demonstrates that you can position individual control elements anywhere on the page.
-  View source to see underlying code.
-  </p>
-
-  <!-- PLAYER WILL ONLY LOOK FOR LINKS IN .PT-PLAYLIST -->
-  <div class="pt-playlist">
-    <ul class="links">
-      <li class="first"><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>
-      <li><a href="audio/118935__dobroide__20110423-night-chorus_0.mp3" title="Night Chorus of birds...">Night Chorus - dobroide</a></li>  
-      <li><a href="audio/104483__soundbytez__desert-aviary02.mp3">Desert Aviary - Soundbytez</a></li>  
-      <li class="last"><a href="audio/5 Crunchy Space.mp3">Crunchy Space - Arthur Hamidi</a></li>
-    </ul>
+  <div class="play-wrapper pt-hide">
+    <a class="pt-play-pause" href="#" title="Play/Pause">
+      <span class="play-btn"><i class="fa fa-play"></i></span>
+      <span class="pause-btn"><i class="fa fa-pause"></i></span>
+    </a>
   </div>
-</div>
-
-<div class="pt-scrubber pt-hide">
-  <div class="pt-statusbar">  
-    <div class="pt-loading"></div>  
-    <div class="pt-position"><div class="pt-handle"></div></div>  
+  
+  <div class="main-wrapper">
+    <h2><a href="index.html">Pushtape Player</a> &raquo; Exploded Controls</h2>
+    <p>
+    This example demonstrates that you can position individual control elements anywhere on the page.
+    View source to see underlying code.
+    </p>
+  
+    <!-- PLAYER WILL ONLY LOOK FOR LINKS IN .PT-PLAYLIST -->
+    <div class="pt-playlist">
+      <ul class="links">
+        <li class="first"><a href="audio/4048__realrhodessounds__ambientloop83bpm.mp3">Ambient Loop 83 BPM - BPM RealRhodesSounds</a></li>
+        <li><a href="audio/118935__dobroide__20110423-night-chorus_0.mp3" title="Night Chorus of birds...">Night Chorus - dobroide</a></li>  
+        <li><a href="audio/104483__soundbytez__desert-aviary02.mp3">Desert Aviary - Soundbytez</a></li>  
+        <li class="last"><a href="audio/5 Crunchy Space.mp3">Crunchy Space - Arthur Hamidi</a></li>
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<div class="pt-time-wrapper pt-hide">
-  <div class="pt-time">
-    <span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>
+  
+  <div class="pt-scrubber pt-hide">
+    <div class="pt-statusbar">  
+      <div class="pt-loading"></div>  
+      <div class="pt-position"><div class="pt-handle"></div></div>  
+    </div>
   </div>
-</div>
-
-
-
-<div class="next-wrapper pt-hide">
-  <a class="pt-next" href="#" title="Next"> <i class="fa fa-step-forward"></i></a>
-</div>
-
-<div class="previous-wrapper pt-hide">
-  <a class="pt-previous" href="#" title="Previous"> <i class="fa fa-step-backward"></i> </a>
-</div>
-
-<div class="pt-current-track-title pt-hide">Click a link...</div>
-
-</div>
-
-
+  
+  <div class="pt-time-wrapper pt-hide">
+    <div class="pt-time">
+      <span class="pt-current-time">--:--</span> / <span class="pt-duration">--:--</span>
+    </div>
+  </div>
+  
+  <div class="next-wrapper pt-hide">
+    <a class="pt-next" href="#" title="Next"> <i class="fa fa-step-forward"></i></a>
+  </div>
+  
+  <div class="previous-wrapper pt-hide">
+    <a class="pt-previous" href="#" title="Previous"> <i class="fa fa-step-backward"></i> </a>
+  </div>
+  
+  <div class="pt-current-track-title pt-hide">Click a link...</div>
+  
+  <!-- Demo folder includes SM2 script, but you should really grab it from the source: http://www.schillmania.com/projects/soundmanager2/ -->
+  <script type="text/javascript" src="js/soundmanager2-jsmin.js"></script>
+  <script type="text/javascript" src="js/pushtape-player.js"></script>
+  <script type="text/javascript">
+  /**
+   * Setup the Pushtape Player
+   */
+  var pushtapePlayer = null; // Instance
+  
+  soundManager.setup({
+    debugMode: true,   // disable or enable debug output
+    url: 'swf/',       // path to directory containing SM2 SWF
+    useHighPerformance: true, // keep flash on screen, boost performance
+    preferFlash: true, // for visualization effects (smoother scrubber)
+    flashVersion: 9,
+    wmode: 'transparent', // transparent SWF, if possible
+    onready: function() {
+      // Initialize pushtape player when SM2 is ready
+      pushtapePlayer = new PushtapePlayer();
+      pushtapePlayer.init({
+        playNext: true, // stop after one sound, or play through list until end
+        autoPlay: false,  // start playing the first sound right away
+        repeatAll: false, // repeat playlist after last track
+        containerClass : 'pt-playlist', // If empty, we will scan *all* links on the page. If set, limits the scope of search inside containerClass
+      });
+    },
+    ontimeout: function() {
+      // Could not start. Missing SWF? Flash blocked? Show an error, etc.?
+      console.log('Error initializing the Pushtape player.');
+    }  
+  });
+  </script>
 </body>
 </html>
