@@ -137,12 +137,12 @@ a {
 /* Buffering animation */
 @-webkit-keyframes buffering {
   0%   { opacity:1; }
-  50%   { opacity:.2; }
+  50%   { opacity:.5; }
   100% { opacity:1; }
 }
 
 @keyframes buffering {
   0%   { opacity:1; }
-  50% { opacity:.2; }
+  50% { opacity:.5; }
   100% { opacity:1; }
 }
