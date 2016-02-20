@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a ch
 ### Added
 - This CHANGELOG file
 - Autoscan (mutation observer) feature that automatically detects new audio links in the container.
+- Destroy() method for shutting down the player
 
 ## [1.0.0] - 2014-8-12
 ### Added
