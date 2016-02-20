@@ -97,7 +97,7 @@ You can add markup for the global controls on the page, or choose to use the def
 - .pt-buffering (state: sound is buffering)
 - .pt-paused (state: sound is paused)
 
-## Utility class
+## Utility classes
 - .pt-hide (If playable links are found, this is removed. Used to hide global controls if no links found. )
 - .pt-container (this is automatically applied to the container set by containerClass)
 
