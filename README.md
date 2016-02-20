@@ -32,6 +32,7 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
           autoPlay: false,  // start playing the first sound right away
           repeatAll: false, // repeat playlist after last track
           containerClass : '', // If empty, scan entire page for audio links. If set, limits the scope of search inside containerClass
+          autoScan : true, // Automatically observe changes to container and scan for new links to add to playlist       
           linkClass : '', // By default, add all links found. If set, will only add links with this class 
           addControlsMarkup: {
             'enabled' : false, 
@@ -50,16 +51,30 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
 #Config options
 Option  | Type | Default | Description
 ------- | ---- | ------- | -----------
-playNext  | boolean | true  | stop after one sound, or play through list until end
-autoPlay  | boolean | false | start playing the first sound right away
-repeatAll | boolean | false | repeat playlist from beginning after last track
-containerClass | string | '' | Empty default scans entire page for links, if set will scan only inside containerClass
+playNext  | boolean | true  | Stop after one sound, or play through list until end
+autoPlay  | boolean | false | Start playing the first sound right away
+repeatAll | boolean | false | Repeat playlist from beginning after last track
+containerClass | string | '' | Empty default scans entire page (document.body) for links, otherwise if set will only scan inside containerClass 
+autoScan | string | true | Automatically observe changes to container and scan for new links to add to playlist
 linkClass | string | '' | Empty default will add all audio links found. If set to pushtape-player, will only add audio links that have the class, i.e. <a class="pushtape-player" href="file.mp3"></a>
 addControlsMarkup.enabled | boolean | false | If true, global controls markup is dynamically inserted inside of containerClass
 addControlsMarkup.controlsMarkupClass | string | 'pt-controls-wrapper' | Wrapper class 
 addControlsMarkup.position | string | 'top' | Position the controls inside the top or bottom of the document or containerClass
   
-#Style options
+# Autoscan  
+The autoscan feature is implemented as a mutationobserver, meaning that any DOM changes in the container element will trigger the player to rescan for new audio links and update the order of the playlist. This is useful for SPA (single-page-application) webapps and AJAX heavy websites, allowing the player to be a "drop in" seamless client-side solution in scenarios where otherwise you'd need to manually manage and update the player and playlist state.
+
+# Data attributes
+To keep track of links on a page, there are a few HTML data attributes that are used.
+
+Data attribute | Type | Description
+-------------- | ----- ------------
+data-pushtape-sound-id | string | A unique sound identifier used internally to keep track of sounds. You can manually set this on your links, otherwise one will automatically be generated per link found.
+data-pushtape-index | integer | Automatically applied to all links found on a page and keeps track of the order that links should be played. 
+data-pushtape-current-sound-id | string | This is automatically assigned to the global playback button element so you know which sound is currently playing.
+data-pushtape-current-index | integer | This is automatically assigned to the global playback button, useful for knowing where the playlist index is pointing.
+
+# Style options
 One of the design goals of this player was to make it extremely flexible to modify the look and feel of the global controls. You can use plain CSS to position and style the global controls however you'd like, and each audio link on the page is given special classes (.pt-link, .pt-playing, etc). I tried not to force or inject styles with javascript as much as possible, however in certain places it does happen (setting % width for .pt-position and .pt-loading, for instance).
 You can add markup for the global controls on the page, or choose to use the default markup provided. (see config.addControlsMarkup above). 
 
@@ -84,6 +99,7 @@ You can add markup for the global controls on the page, or choose to use the def
 
 ## Utility class
 - .pt-hide (If playable links are found, this is removed. Used to hide global controls if no links found. )
+- .pt-container (this is automatically applied to the container set by containerClass)
 
 ## Default controls markup template
           <div class="pt-controls-markup">
