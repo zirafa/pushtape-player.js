@@ -68,7 +68,7 @@ The autoscan feature is implemented as a mutationobserver, meaning that any DOM 
 To keep track of links on a page, there are a few HTML data attributes that are used.
 
 Data attribute | Type | Description
--------------- | ----- ------------
+-------------- | ---- | ------------
 data-pushtape-sound-id | string | A unique sound identifier used internally to keep track of sounds. You can manually set this on your links, otherwise one will automatically be generated per link found.
 data-pushtape-index | integer | Automatically applied to all links found on a page and keeps track of the order that links should be played. 
 data-pushtape-current-sound-id | string | This is automatically assigned to the global playback button element so you know which sound is currently playing.
