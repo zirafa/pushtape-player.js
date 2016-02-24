@@ -1,11 +1,10 @@
 # Change Log
-All notable changes to this project will be documented in this file following recom[](http://keepachangelog.com/).
-This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a changelog](http://keepachangelog.com/).
+[Keep a changelog](http://keepachangelog.com/).
 
-## [Unreleased]
+## [2.0.0] - 2016-2-24
 ### Added
 - This CHANGELOG file
-- Autoscan (mutation observer) feature that automatically detects new audio links in the container.
+- Autoscan function and mutation observer feature that automatically detects new audio links in the container.
 - Destroy() method for shutting down the player
 
 ## [1.0.0] - 2014-8-12
