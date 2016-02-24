@@ -180,14 +180,32 @@ a {
 }
 
 /* Buffering animation */
+
+/* Buffering animation */
 @-webkit-keyframes buffering {
-  0%   { opacity:1; }
-  50%   { opacity:.5; }
-  100% { opacity:1; }
+     0%  { opacity: 1.0}
+    10%  { opacity: .90}
+    20%  { opacity: .80}
+    30%  { opacity: .70}
+    40%  { opacity: .60} 
+    50%  { opacity: .50}
+    60%  { opacity: .60}
+    70%  { opacity: .70}
+    80%  { opacity: .80}
+    90%  { opacity: .90}
+    100% { opacity: 1.0}
 }
 
 @keyframes buffering {
-  0%   { opacity:1; }
-  50% { opacity:.5; }
-  100% { opacity:1; }
+     0%  { opacity: 1.0}
+    10%  { opacity: .90}
+    20%  { opacity: .80}
+    30%  { opacity: .70}
+    40%  { opacity: .60} 
+    50%  { opacity: .50}
+    60%  { opacity: .60}
+    70%  { opacity: .70}
+    80%  { opacity: .80}
+    90%  { opacity: .90}
+    100% { opacity: 1.0}
 }
