@@ -95,8 +95,8 @@ a {
   padding:1em;
   border-bottom:solid 1px #EEE;
 }
-.links li.last a {
-  border-bottom:none;
+.links li:last-child a {
+
 }
 .links a:hover,
 .links a.pt-playing, 
@@ -113,13 +113,24 @@ a {
   margin-right:20px;
 }
 .sortable1 ul {
-  border:solid 5px green;
+  border:solid 3px green;
+  border-radius:5px;
 }
 .sortable2 ul {
-  border:solid 5px red;
+  border:solid 3px red;
+  border-radius:5px;
+  
 }
 .sortable2 ul li {
   opacity:.2;
+}
+.sortable1 ul li a,
+.sortable2 ul li a {
+  cursor:move;
+}
+.sortable1 ul li a:before,
+.sortable2 ul li a:before {
+  cursor:pointer;
 }
 
 .pt-link.pt-loading { opacity:.2;}
