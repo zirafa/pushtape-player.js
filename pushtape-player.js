@@ -7,12 +7,12 @@
  * Notes:
  * - This player only binds its behavior to CSS classes. You can provide all the necessary controls markup, or optionally let the player generate it.
  * - There are individual play/pause controls per link, as well as global playback controls  - pause/play, scrubber, previous/next, and time.
- * - By default, it will grabs all links on a page. You can optionally set a pushtapePlayer.config.containerClass to limit the scope, or
+ * - By default, it grabs all links in document.body. You can optionally set a pushtapePlayer.config.containerClass to limit the scope, and
  *   set pushtapePlayer.config.linkClass to only add links with a given class.
- * - Track index for links on a page are marked and referenced with a data-pushtape-index HTML attribute.
+ * - Playlist index is automatically set via the data-pushtape-index attribute, based on the order links are found.
+ * - Sounds are uniquely identified in each link via the data-pushtape-sound-id attribute. If not specified, an automatic ID will be generated per link. 
  *
- * Requires SoundManager 2 Javascript API.
- * http://schillmania.com/projects/soundmanager2/
+ * Requires SoundManager 2 Javascript API: http://schillmania.com/projects/soundmanager2/
  */
 
 /**
@@ -250,6 +250,24 @@ function PushtapePlayer () {
     } while (o && o.parentNode && o.nodeName.toLowerCase() != sNodeName);
     return (o.nodeName.toLowerCase() == sNodeName?o:null);
   }
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  this.debounce = function(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };  
 
   this.getTime = function(nMSec, bAsString) {
     // convert milliseconds to mm:ss, return as object literal or string
@@ -390,8 +408,7 @@ function PushtapePlayer () {
       if (self.controls.position != null) { self.controls.position.style.width = '0px';}
   
       // After sound finishes, play next sound if playNext is true
-      
-      if (pl.config.playNext) {
+      if (pl.config.playNext && self.lastSound._data.orphanedIndex != true) {
         self.globalNext();
       }
     },
@@ -594,13 +611,14 @@ function PushtapePlayer () {
       oLink: o, // DOM node for reference within SM2 object event handlers
       className: self.css.sPlaying,
       index: soundIndex, // use HTML data-attribute to reference track index
+      orphanedIndex: false, // used to flag bad indexes
       oTitle: o.title ? o.title: o.innerHTML
     };
     return thisSound;
   }
 
   this.handleClick = function(e) {
-
+    self.scanPage();        
     // a sound link was clicked
     if (typeof e.button != 'undefined' && e.button > 1) {
       // ignore right-click
@@ -619,9 +637,7 @@ function PushtapePlayer () {
     if (!o.getAttribute('data-pushtape-index')) {
       return true;
     }
-    var thisSound,
-        soundIndex,
-        soundID;
+    var thisSound, soundIndex, soundID;
     if (o.getAttribute('data-pushtape-sound-id') != null) {
       soundID = o.getAttribute('data-pushtape-sound-id');
       thisSound = sm.getSoundById(String(soundID));
@@ -675,9 +691,6 @@ function PushtapePlayer () {
       return (!oSound._data.metadata || !oSound._data.metadata.data.givenDuration ? (oSound.durationEstimate||0) : oSound._data.metadata.data.givenDuration);
     }
   }
-  this.resetIndex = function() {
-    self.lastSound = null;
-  }
 
   /**
    * Global Control methods
@@ -700,13 +713,15 @@ function PushtapePlayer () {
     return false;
   }  
   this.globalNext = function(e) {
-    sm._writeDebug('Play next track...');    
-    if (self.lastSound) {
+    sm._writeDebug('Play next track...');
+    if (self.lastSound && self.lastSound._data.orphanedIndex != true) {
       var nextLink = self.lastSound._data.index + 1;
       if (nextLink < self.links.length) {
+        self.stopSound(self.lastSound);
         self.handleClick({'target':self.links[nextLink]});
       }
       else if (pl.config.repeatAll) {
+        self.stopSound(self.lastSound);
         self.handleClick({'target':self.links[0]});
       }
     } else {
@@ -723,13 +738,15 @@ function PushtapePlayer () {
 
   }
   this.globalPrevious = function(e) {
-    sm._writeDebug('Play previous track...');    
-    if (self.lastSound) {
+    sm._writeDebug('Play previous track...');
+    if (self.lastSound && self.lastSound._data.orphanedIndex != true) {
       var prevLink = self.lastSound._data.index - 1;
       if (prevLink >= 0) {
+        self.stopSound(self.lastSound);
         self.handleClick({'target':self.links[prevLink]});
       }
       else if (pl.config.repeatAll) {
+        self.stopSound(self.lastSound);
         self.handleClick({'target':self.links[self.links.length - 1]});
       }
     } else {
@@ -744,8 +761,7 @@ function PushtapePlayer () {
     return false;
   }
 
-
-  // Initialize the player. 
+  // Initialize the player and create self.scanPage based on init values
   this.init = function(options) {
 
     // Allow options arguments to override config defaults
@@ -798,15 +814,17 @@ function PushtapePlayer () {
     
     var countScan = 0;
     // Function that scans for links on the page
-    var scanPage = function() {
+    self.scanPage = function() {
         cleanup();
-        
+        self.config.playNext = (options.playNext === false) ? false : true;
+
         // Find relevant links
         var oLinks = container.getElementsByTagName('a');
 
         // Build playlist
         self.links = [];
         var foundItems = 0;
+        var currentItem = null;
         for (var i = 0; i < oLinks.length; i++) {
           if ((sm.canPlayLink(oLinks[i]) || self.hasClass(oLinks[i], self.playableClass)) && !self.hasClass(oLinks[i],self.excludeClass) && !self.hasClass(oLinks[i], self.cueClass)) {
             // If linkClass is not set, add all links found, otherwise only add links with the linkClass
@@ -821,19 +839,34 @@ function PushtapePlayer () {
                 * attribute, which will allow you to uniquely declare and reference sounds that are loaded.
                 */
               oLinks[i].setAttribute('data-pushtape-index', foundItems);
-              // If a sound is already playing, add the appropriate CSS style and make sure index is correct
+              // Set a flag if we find the current playing sound
               if (self.playStatus == 'playing' || self.playStatus == 'paused' && self.lastSound != null) {
-                if (oLinks[i].getAttribute('data-pushtape-sound-id') != null && oLinks[i].getAttribute('data-pushtape-sound-id') == self.lastSound.id) {
-                  var cssClass = (self.playStatus == 'playing') ? self.css.sPlaying : self.css.sPaused;
-                  self.addStyleBySoundID(self.lastSound, cssClass);
-                  self.lastSound._data.oLink = oLinks[i];
+                if (oLinks[i].getAttribute('data-pushtape-sound-id') != null && self.lastSound.hasOwnProperty('id') && oLinks[i].getAttribute('data-pushtape-sound-id') == self.lastSound.id) {
+                  currentItem = i;
                 }
               }
-              
+
               foundItems++;
             }
           }
         }
+          // If a sound is already playing, add the appropriate CSS style and make sure index is correct
+        if (currentItem != null) {
+          var cssClass = (self.playStatus == 'playing') ? self.css.sPlaying : self.css.sPaused;
+          self.addStyleBySoundID(self.lastSound, cssClass);
+          self.lastSound._data.oLink = oLinks[currentItem];
+          self.lastSound._data.index = currentItem;
+          self.lastSound._data.orphanedIndex = false;
+          // Add some data attributes to global controls
+          if (self.controls.playButton != null) {
+            self.controls.playButton.setAttribute('data-pushtape-current-index', currentItem);
+          }
+        }
+        else if (self.lastSound != null) { 
+          // The playing sound was not found in current page playlist, flag it as orphaned
+          self.lastSound._data.orphanedIndex = true;
+        }
+
         // Expose the number of items found (same as self.links.length);
         self.foundItems = foundItems;
 
@@ -904,7 +937,7 @@ function PushtapePlayer () {
         }
         
         if (foundItems > 0) {
-    
+          
           // Hide/Show the global control element class if no items found.
           // Depends on .pt-hide { display:none; } to be defined in CSS.
           var ptControls = document.getElementsByClassName('pt-hide');
@@ -913,7 +946,7 @@ function PushtapePlayer () {
               self.removeClass(ptControls[i], 'pt-hide');
             }
           }
-    
+          
           // Play first track if autoPlay set
           if (self.config.autoPlay && countScan === 0) {
             self.handleClick({target:self.links[0],preventDefault:function(){}});
@@ -926,12 +959,12 @@ function PushtapePlayer () {
     
     // Observe any changes to container and scan the container for new links
     if (self.config.autoScan) {
-      observer = new MutationObserver(function(mutations) {
-        scanPage();      
-      });
+      observer = new MutationObserver(self.debounce(function(mutations) {
+        self.scanPage();      
+      }), 20);
       observer.observe(container, {childList: true, subtree:true});
     }
-    scanPage();
+    self.scanPage();
   }
   
   // Destroy/reset the player
@@ -969,7 +1002,4 @@ function PushtapePlayer () {
     
     sm.reset();
   }
-  
-  
-  
 };
