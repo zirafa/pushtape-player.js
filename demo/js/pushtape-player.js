@@ -855,7 +855,7 @@ function PushtapePlayer () {
           if (self.playStatus == 'playing' && self.playStatus != 'stopped') {
             self.addStyleBySoundID(self.lastSound, self.css.sPlaying);
           }
-          else {
+          else if (self.playStatus == 'playing' && self.playStatus != 'stopped'){
             self.addStyleBySoundID(self.lastSound, self.css.sPaused);
           }
           self.lastSound._data.oLink = oLinks[currentItem];
