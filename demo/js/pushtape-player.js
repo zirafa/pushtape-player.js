@@ -696,7 +696,7 @@ function PushtapePlayer () {
    * Global Control methods
    */
   this.globalTogglePlay = function(e) {
-    if (self.lastSound) {
+    if (self.lastSound != null) {
       // Toggle active sound
       self.lastSound.togglePause();
     }
@@ -840,20 +840,24 @@ function PushtapePlayer () {
                 */
               oLinks[i].setAttribute('data-pushtape-index', foundItems);
               // Set a flag if we find the current playing sound
-              if (self.playStatus == 'playing' || self.playStatus == 'paused' && self.lastSound != null) {
+              if (self.playStatus == 'playing' || self.playStatus == 'paused' || self.playStatus == 'stopped' && self.lastSound != null) {
                 if (oLinks[i].getAttribute('data-pushtape-sound-id') != null && self.lastSound.hasOwnProperty('id') && oLinks[i].getAttribute('data-pushtape-sound-id') == self.lastSound.id) {
-                  currentItem = i;
+                  currentItem = foundItems;
                 }
               }
-
               foundItems++;
             }
           }
         }
-          // If a sound is already playing, add the appropriate CSS style and make sure index is correct
-        if (currentItem != null) {
-          var cssClass = (self.playStatus == 'playing') ? self.css.sPlaying : self.css.sPaused;
-          self.addStyleBySoundID(self.lastSound, cssClass);
+        
+        // If a sound is already playing, add the appropriate CSS style and make sure index is correct
+        if (currentItem !== null) {
+          if (self.playStatus == 'playing' && self.playStatus != 'stopped') {
+            self.addStyleBySoundID(self.lastSound, self.css.sPlaying);
+          }
+          else {
+            self.addStyleBySoundID(self.lastSound, self.css.sPaused);
+          }
           self.lastSound._data.oLink = oLinks[currentItem];
           self.lastSound._data.index = currentItem;
           self.lastSound._data.orphanedIndex = false;
@@ -862,7 +866,7 @@ function PushtapePlayer () {
             self.controls.playButton.setAttribute('data-pushtape-current-index', currentItem);
           }
         }
-        else if (self.lastSound != null) { 
+        else if (self.lastSound != null) {
           // The playing sound was not found in current page playlist, flag it as orphaned
           self.lastSound._data.orphanedIndex = true;
         }
@@ -947,15 +951,12 @@ function PushtapePlayer () {
             }
           }
           
-          // Play first track if autoPlay set
-          if (self.config.autoPlay && countScan === 0) {
-            self.handleClick({target:self.links[0],preventDefault:function(){}});
-          }
         }    
         
         doEvents('add');
         countScan++;
     }
+
     
     // Observe any changes to container and scan the container for new links
     if (self.config.autoScan) {
@@ -965,6 +966,12 @@ function PushtapePlayer () {
       observer.observe(container, {childList: true, subtree:true});
     }
     self.scanPage();
+    
+    // Play first track if autoPlay set
+    if (self.config.autoPlay) {
+      self.handleClick({target:self.links[0],preventDefault:function(){}});
+    }
+    
   }
   
   // Destroy/reset the player

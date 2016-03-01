@@ -1,6 +1,12 @@
 # Change Log
 [Keep a changelog](http://keepachangelog.com/).
 
+## [2.0.1] - 2016-3-1
+### Fixed
+- Infinite loop bug with autoStart = true
+- repeatAll causing orphanedIndex to be true
+- Bad currentItem bug for globalPlay, globalNext, globalPrevious
+
 ## [2.0.0] - 2016-2-24
 ### Added
 - This CHANGELOG file
