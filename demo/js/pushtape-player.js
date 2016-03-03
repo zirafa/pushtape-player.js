@@ -816,6 +816,10 @@ function PushtapePlayer () {
     // Function that scans for links on the page
     self.scanPage = function() {
         cleanup();
+        
+        if (self.dragActive) {
+          return;
+        }
         self.config.playNext = (options.playNext === false) ? false : true;
 
         // Find relevant links
@@ -840,8 +844,8 @@ function PushtapePlayer () {
                 */
               oLinks[i].setAttribute('data-pushtape-index', foundItems);
               // Set a flag if we find the current playing sound
-              if (self.playStatus == 'playing' || self.playStatus == 'paused' || self.playStatus == 'stopped' && self.lastSound != null) {
-                if (oLinks[i].getAttribute('data-pushtape-sound-id') != null && self.lastSound.hasOwnProperty('id') && oLinks[i].getAttribute('data-pushtape-sound-id') == self.lastSound.id) {
+              if (self.lastSound != null && self.lastSound.hasOwnProperty('id') && oLinks[i].getAttribute('data-pushtape-sound-id') != null) {
+                if (oLinks[i].getAttribute('data-pushtape-sound-id') == self.lastSound.id) {
                   currentItem = foundItems;
                 }
               }
@@ -849,28 +853,18 @@ function PushtapePlayer () {
             }
           }
         }
-        
-        // If a sound is already playing, add the appropriate CSS style and make sure index is correct
+                
+        // If current playing item found, update the object
         if (currentItem !== null) {
-          if (self.playStatus == 'playing' && self.playStatus != 'stopped') {
-            self.addStyleBySoundID(self.lastSound, self.css.sPlaying);
-          }
-          else if (self.playStatus == 'playing' && self.playStatus != 'stopped'){
-            self.addStyleBySoundID(self.lastSound, self.css.sPaused);
-          }
           self.lastSound._data.oLink = oLinks[currentItem];
           self.lastSound._data.index = currentItem;
           self.lastSound._data.orphanedIndex = false;
-          // Add some data attributes to global controls
-          if (self.controls.playButton != null) {
-            self.controls.playButton.setAttribute('data-pushtape-current-index', currentItem);
-          }
         }
         else if (self.lastSound != null) {
           // The playing sound was not found in current page playlist, flag it as orphaned
           self.lastSound._data.orphanedIndex = true;
         }
-
+          
         // Expose the number of items found (same as self.links.length);
         self.foundItems = foundItems;
 
@@ -881,7 +875,7 @@ function PushtapePlayer () {
          *  control markup in HTML yourself (i.e. allowing you to radically alter positioning of things)
          *  If addControlsMarkup = true, it will insert HTML into the top/bottom (addControlsMarkup.position) of the playlist scope
          */
-        if (self.config.addControlsMarkup.enabled && foundItems > 0 && countScan === 0) {
+        if (self.config.addControlsMarkup.enabled && foundItems > 0) {
           sm._writeDebug('Attempting to add controls markup using class: ' + self.config.addControlsMarkup.controlsMarkupClass);
           var controlsMarkup = null;
           var controlsEl = document.getElementsByClassName(self.config.addControlsMarkup.controlsMarkupClass)[0];
@@ -915,35 +909,31 @@ function PushtapePlayer () {
             sm._writeDebug('Creating a new DOM element for control markup');
           }
     
-          if (controlsMarkup != null) {
+          if (controlsMarkup != null && controlsMarkup.innerHTML.length <= 0) {
             // If you really need to manipulate the markup, just disable addControlsMarkup and manually add the markup in your HTML.
             // You could also override self.defaultControlsMarkup before init(); if you want to keep everything in JS
             controlsMarkup.innerHTML = self.defaultControlsMarkup;
           }
         }
-        if (countScan === 0) {
-          // Initialize the global controls...this can probably be optimized, but it's also supposed to be kinda verbose.
-          self.controls.playButton = document.getElementsByClassName(self.controls.playButtonClass)[0];
-          self.controls.nextButton = document.getElementsByClassName(self.controls.nextButtonClass)[0];
-          self.controls.previousButton = document.getElementsByClassName(self.controls.previousButtonClass)[0];  
-          self.controls.currentTime = document.getElementsByClassName(self.controls.currentTimeClass)[0];  
-          self.controls.duration = document.getElementsByClassName(self.controls.durationClass)[0];  
-          self.controls.statusBar = document.getElementsByClassName(self.controls.statusBarClass)[0];  
-          self.controls.loading = document.getElementsByClassName(self.controls.loadingClass)[0];  
-          self.controls.position = document.getElementsByClassName(self.controls.positionClass)[0];  
-          self.controls.scrubber = document.getElementsByClassName(self.controls.scrubberClass)[0];  
-          self.controls.trackTitle = document.getElementsByClassName(self.controls.trackTitleClass)[0];  
+        // Find the global controls...this can probably be optimized, but it's also supposed to be kinda granular.
+        self.controls.playButton = document.getElementsByClassName(self.controls.playButtonClass)[0];
+        self.controls.nextButton = document.getElementsByClassName(self.controls.nextButtonClass)[0];
+        self.controls.previousButton = document.getElementsByClassName(self.controls.previousButtonClass)[0];  
+        self.controls.currentTime = document.getElementsByClassName(self.controls.currentTimeClass)[0];  
+        self.controls.duration = document.getElementsByClassName(self.controls.durationClass)[0];  
+        self.controls.statusBar = document.getElementsByClassName(self.controls.statusBarClass)[0];  
+        self.controls.loading = document.getElementsByClassName(self.controls.loadingClass)[0];  
+        self.controls.position = document.getElementsByClassName(self.controls.positionClass)[0];  
+        self.controls.scrubber = document.getElementsByClassName(self.controls.scrubberClass)[0];  
+        self.controls.trackTitle = document.getElementsByClassName(self.controls.trackTitleClass)[0];  
+    
+        // Global control bindings...check for nulls in case these elements don't exist.
+        if (self.controls.playButton != null && foundItems > 0) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
+        if (self.controls.nextButton != null && foundItems > 0) { _event['add'](self.controls.nextButton,'click',self.globalNext);}
+        if (self.controls.previousButton != null && foundItems > 0) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
       
-          // Global control bindings...check for nulls in case these elements don't exist.
-          if (self.controls.playButton != null && foundItems > 0) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
-          if (self.controls.nextButton != null && foundItems > 0) { _event['add'](self.controls.nextButton,'click',self.globalNext);}
-          if (self.controls.previousButton != null && foundItems > 0) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
-        }
-        
         if (foundItems > 0) {
-          
-          // Hide/Show the global control element class if no items found.
-          // Depends on .pt-hide { display:none; } to be defined in CSS.
+          // Toggle the .pt-hide visibility class if we find items. Depends on .pt-hide { display:none; } in your CSS file.
           var ptControls = document.getElementsByClassName('pt-hide');
           if (ptControls != null && ptControls.length >= 1) {
             for(var i = 0; i < ptControls.length; i++) {
@@ -952,6 +942,17 @@ function PushtapePlayer () {
           }
           
         }    
+        
+        // Call the appropriate sound methods based on current state
+        if (self.lastSound != null && self.lastSound.readyState == 3) {
+          if (self.lastSound.paused == 1 ) {
+            self.events.pause.call(self.lastSound);
+          }
+          else if (self.lastSound.playState == 1) {
+            self.events.play.call(self.lastSound); 
+            self.events.whileplaying.call(self.lastSound); 
+          }
+        }      
         
         doEvents('add');
         countScan++;
@@ -962,7 +963,7 @@ function PushtapePlayer () {
     if (self.config.autoScan) {
       observer = new MutationObserver(self.debounce(function(mutations) {
         self.scanPage();      
-      }), 20);
+      }), 100);
       observer.observe(container, {childList: true, subtree:true});
     }
     self.scanPage();

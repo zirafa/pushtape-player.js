@@ -1,6 +1,13 @@
 # Change Log
 [Keep a changelog](http://keepachangelog.com/).
 
+## [2.0.2] - 2016-3-3
+### Fixed
+- Bug where global control markup context was lost
+### Changed
+- Increased autoscan debounce to 100ms
+- Use .call() to simplify self.lastSound state management in scanPage()
+
 ## [2.0.1] - 2016-3-1
 ### Fixed
 - Infinite loop bug with autoStart = true
