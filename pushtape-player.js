@@ -31,6 +31,7 @@ function PushtapePlayer () {
       ua = navigator.userAgent,
       isTouchDevice = (ua.match(/ipad|ipod|iphone/i)),
       observer = {},
+      bodyEl = null,
       cleanup;
 
   // Controls Template. You can override this before init() if you need to, or just set
@@ -40,7 +41,7 @@ function PushtapePlayer () {
             '<a class="pt-play-pause" href="#" title="Play/Pause"><span class="play-btn"><span class="pt-play-icon">▶</span></span><span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span></a>',
             '<a class="pt-next" href="#" title="Next"> <span class="pt-next-icon">&raquo;</span></a>',
             '<a class="pt-previous" href="#" title="Previous"><span class="pt-previous-icon">&laquo;</span> </a>',
-            '<span class="pt-current-track-title"></span>',
+            '<a class="pt-permalink" href=""><span class="pt-current-track-title"></span></a>',
             '<div class="pt-scrubber">',
               '<div class="pt-statusbar">', 
                 '<div class="pt-loading"></div>',  
@@ -71,6 +72,7 @@ function PushtapePlayer () {
   this.controls = {
     // CSS selectors for control elements
     playButtonClass: 'pt-play-pause',
+    playAllButtonClass: 'pt-play-all', // Clones playButton behavior, useful for some UX designs 
     nextButtonClass: 'pt-next',
     previousButtonClass: 'pt-previous',
     currentTimeClass: 'pt-current-time',
@@ -80,8 +82,10 @@ function PushtapePlayer () {
     positionClass: 'pt-position',
     loadingClass: 'pt-loading',
     trackTitleClass: 'pt-current-track-title', // current track
+    permaLinkClass: 'pt-permalink', // permalink for additional info
     // DOM elements for controls. These are assigned values in this.init method
     playButton: null, 
+    playAllButton: null, 
     nextButton: null,
     previousButton: null,
     currentTime: null,
@@ -90,7 +94,8 @@ function PushtapePlayer () {
     loading: null,
     position: null,
     scrubber: null,
-    trackTitle: null
+    trackTitle: null,
+    permaLink: null
   };
   
   this.playableClass = 'pt-playable'; // CSS class for forcing a link to be playable (eg. doesn't have .MP3 in it)
@@ -112,6 +117,7 @@ function PushtapePlayer () {
     sLoading: 'pt-loading',
     sPlaying: 'pt-playing',
     sBuffering: 'pt-buffering',
+    sError: 'pt-error',
     sPaused: 'pt-paused',
     sContainer: 'pt-container'
   }
@@ -320,20 +326,33 @@ function PushtapePlayer () {
       // where this._data.oLink is unreliable
       pl.addStyleBySoundID(this, pl.css.sPlaying);
 
-      // Remove/add class to global controls
+      // Remove/add class to global elements
       pl.removeClass(self.controls.playButton, self.css.sPaused);
-      pl.addClass(self.controls.playButton, self.css.sPlaying);    
+      pl.addClass(self.controls.playButton, self.css.sPlaying);
+      // Play All       
+      pl.removeClass(self.controls.playAllButton, self.css.sPaused);
+      pl.addClass(self.controls.playAllButton, self.css.sPlaying);      
+      // Body 
+      pl.removeClass(bodyEl, self.css.sPaused);
+      pl.addClass(bodyEl, self.css.sPlaying);   
        
-      // Add some data attributes to global controls
+      // Add some data attributes to global play controls
       if (self.controls.playButton != null) {
         self.controls.playButton.setAttribute('data-pushtape-current-sound-id', this.id);
         self.controls.playButton.setAttribute('data-pushtape-current-index', this._data.index);
-      }       
+      }
+      if (self.controls.playAllButton != null) {
+        self.controls.playAllButton.setAttribute('data-pushtape-current-sound-id', this.id);
+        self.controls.playAllButton.setAttribute('data-pushtape-current-index', this._data.index);
+      }        
             
       // If trackTitle DOM element exists, populate it with current track
       if (self.controls.trackTitle != null) {
         self.controls.trackTitle.innerHTML = this._data.oTitle;
       }
+      if (self.controls.permaLink != null) {
+        self.controls.permaLink.href = this._data.permaLink;
+      }      
     },
 
     stop: function() {
@@ -342,9 +361,11 @@ function PushtapePlayer () {
       // Remove play symbol from the HTML <title>
       document.title = docTitle;
 
-      // Remove any CSS classes applied to individual links as well as global controls
+      // Remove any CSS classes applied to individual links as well as global elements
       pl.removeStyleBySoundID(this);    
       pl.removeClass(self.controls.playButton, self.css.sPlaying);
+      pl.removeClass(self.controls.playAllButton, self.css.sPlaying);
+      pl.removeClass(bodyEl, self.css.sPlaying);
      
       // If controls DOM element exists, reset it
       if (self.controls.position != null) {
@@ -366,9 +387,15 @@ function PushtapePlayer () {
       // Add/remove individual link CSS classes
       pl.addStyleBySoundID(this, pl.css.sPaused);
       
-      // Add/Remove global controls CSS classes
+      // Add/Remove global element CSS classes
       pl.removeClass(self.controls.playButton, self.css.sPlaying);
       pl.addClass(self.controls.playButton, self.css.sPaused);
+      // Play All
+      pl.removeClass(self.controls.playAllButton, self.css.sPlaying);
+      pl.addClass(self.controls.playAllButton, self.css.sPaused);
+      // Body
+      pl.removeClass(bodyEl, self.css.sPlaying);
+      pl.addClass(bodyEl, self.css.sPaused);          
       
     },
     resume: function() {
@@ -383,11 +410,17 @@ function PushtapePlayer () {
 
       // Add/remove link specific CSS classes
       pl.addStyleBySoundID(this, pl.css.sPlaying);
-
       
-      // Add/remove global control CSS
+      // Add/remove global elements CSS
       pl.removeClass(self.controls.playButton, self.css.sPaused);
       pl.addClass(self.controls.playButton, self.css.sPlaying);
+      // Play All
+      pl.removeClass(self.controls.playAllButton, self.css.sPaused);
+      pl.addClass(self.controls.playAllButton, self.css.sPlaying);
+      // Body
+      pl.removeClass(bodyEl, self.css.sPaused);
+      pl.addClass(bodyEl, self.css.sPlaying);      
+      
 
     },
 
@@ -400,9 +433,15 @@ function PushtapePlayer () {
       // Remove individual link CSS classes
       pl.removeStyleBySoundID(this);
 
-      // Remove all global CSS state classes
+      // Remove global CSS state classes
       pl.removeClass(self.controls.playButton, self.css.sPlaying);
       pl.removeClass(self.controls.playButton, self.css.sPaused);
+      // Play All
+      pl.removeClass(self.controls.playAllButton, self.css.sPlaying);
+      pl.removeClass(self.controls.playAllButton, self.css.sPaused);
+      // Body
+      pl.removeClass(bodyEl, self.css.sPlaying);
+      pl.removeClass(bodyEl, self.css.sPaused); 
 
       // If position DOM element exists, reset it
       if (self.controls.position != null) { self.controls.position.style.width = '0px';}
@@ -439,15 +478,36 @@ function PushtapePlayer () {
         self.controls.loading.style.width = (((this.bytesLoaded/this.bytesTotal)*100)+'%');
       }
     },
-    bufferchange: function() {      
+    bufferchange: function() {
+      // If we encounter an error state, 404, etc just try and skip to the next track
+      if (this.readyState == '2') {
+        sm._writeDebug('Error loading file. Attempting to play the next track...');       
+        var currentSound = this;
+        setTimeout(function(){
+          var bufferSound = currentSound;
+          pl.removeClass(bufferSound._data.oLink, self.css.sBuffering); //Individual link
+          pl.removeClass(self.controls.playButton, self.css.sBuffering); //Global button
+          pl.removeClass(self.controls.playAllButton, self.css.sBuffering); // Play All
+          pl.removeClass(bodyEl, self.css.sBuffering); // Body 
+          pl.addClass(bufferSound._data.oLink, self.css.sError);           
+          self.globalNext();
+        }, 250);
+        return;
+      }
+      
+      // If we are buffering and don't have an error state, add buffering classes
       if (this.isBuffering) {
-        pl.addClass(this._data.oLink, pl.css.sBuffering); // Individual link
+        pl.addClass(this._data.oLink, self.css.sBuffering); // Individual link
         pl.addClass(self.controls.playButton, self.css.sBuffering); // Global button
-        sm._writeDebug('Buffering...');
-      } else {
-        pl.removeClass(this._data.oLink, pl.css.sBuffering); //Individual link
+        pl.addClass(self.controls.playAllButton, self.css.sBuffering); // Play All
+        pl.addClass(bodyEl, self.css.sBuffering); // Body
+        sm._writeDebug('Buffering...');      
+      }
+      else {
+        pl.removeClass(this._data.oLink, self.css.sBuffering); //Individual link
         pl.removeClass(self.controls.playButton, self.css.sBuffering); //Global button
-
+        pl.removeClass(self.controls.playAllButton, self.css.sBuffering); // Play All
+        pl.removeClass(bodyEl, self.css.sBuffering); // Body  
       }
     }
   }
@@ -522,7 +582,7 @@ function PushtapePlayer () {
       } else {
         _event.remove(document,'touchmove',self.handleMouseMove);
       }
-      if (!pl.hasClass(self.controls.playButton, self.css.sPaused)) {
+      if (!pl.hasClass(bodyEl, self.css.sPaused)) {
         self.lastSound.resume();
       }
       self.dragActive = false;
@@ -557,8 +617,8 @@ function PushtapePlayer () {
   this.stopEvent = function(e) {
    if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
-    } else if (typeof event != 'undefined' && typeof event.returnValue != 'undefined') {
-      event.returnValue = false;
+    } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
+      e.returnValue = false;
     }
     return false;
   }
@@ -574,7 +634,8 @@ function PushtapePlayer () {
   this.addSound = function(o) {
     var soundURL = o.href,
         soundIndex,
-        soundID;
+        soundID,
+        pLink;
     if (o.getAttribute('data-pushtape-index') != null) {
       soundIndex = Number(o.getAttribute('data-pushtape-index'));
     }
@@ -592,6 +653,9 @@ function PushtapePlayer () {
       soundID = '_soundID_' + self.soundCount++;
       o.setAttribute('data-pushtape-sound-id', soundID);
     }
+    if (o.getAttribute('data-pushtape-permalink') != null) {
+      pLink = o.getAttribute('data-pushtape-permalink');
+    }    
     thisSound = sm.createSound({
       id: soundID,
       url:o.href,
@@ -610,6 +674,7 @@ function PushtapePlayer () {
     thisSound._data = {
       oLink: o, // DOM node for reference within SM2 object event handlers
       className: self.css.sPlaying,
+      permaLink: pLink,
       index: soundIndex, // use HTML data-attribute to reference track index
       orphanedIndex: false, // used to flag bad indexes
       oTitle: o.title ? o.title: o.innerHTML
@@ -670,12 +735,13 @@ function PushtapePlayer () {
     self.prevLinks = self.links;
     self.linksChanged = false;
     self.lastSound = thisSound; // reference for next call
-
+    
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
-    } else {
+    } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
       e.returnValue = false;
     }
+
     return false;
   }
 
@@ -702,14 +768,14 @@ function PushtapePlayer () {
     }
     else {
       // Otherwise start playing first track
-      self.handleClick({'target':self.links[0]}); 
+      self.handleClick({target:self.links[0], preventDefault:function(){}});
     }
 
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
-    } else {
+    } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
       e.returnValue = false;
-    } 
+    }
     return false;
   }  
   this.globalNext = function(e) {
@@ -722,16 +788,16 @@ function PushtapePlayer () {
       }
       else if (pl.config.repeatAll) {
         self.stopSound(self.lastSound);
-        self.handleClick({'target':self.links[0]});
+        self.handleClick({target:self.links[0], preventDefault:function(){}});
       }
     } else {
       // nothing playing yet, so start first sound
-      self.handleClick({'target':self.links[0]});
+      self.handleClick({target:self.links[0], preventDefault:function(){}});
     }
 
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
-    } else {
+    } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
       e.returnValue = false;
     }
     return false;
@@ -751,11 +817,11 @@ function PushtapePlayer () {
       }
     } else {
       // nothing playing yet, so start first sound
-      self.handleClick({'target':self.links[0]});
+      self.handleClick({target:self.links[0], preventDefault:function(){}});
     }
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
-    } else {
+    } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
       e.returnValue = false;
     }
     return false;
@@ -816,7 +882,8 @@ function PushtapePlayer () {
     // Function that scans for links on the page
     self.scanPage = function() {
         cleanup();
-        
+        bodyEl = document.getElementsByTagName('body')[0];
+
         if (self.dragActive) {
           return;
         }
@@ -871,7 +938,8 @@ function PushtapePlayer () {
         var scope = self.config.containerClass ? 'containerClass: ' + self.config.containerClass : 'entire document (no containerClass set)';
         sm._writeDebug('scanPage(): Found ' + foundItems + ' relevant items in ' + scope);
         
-        /** If addControlsMarkup is false (default), you are expected to add all the
+        /**
+         *  If addControlsMarkup is false (default), you are expected to add all the
          *  control markup in HTML yourself (i.e. allowing you to radically alter positioning of things)
          *  If addControlsMarkup = true, it will insert HTML into the top/bottom (addControlsMarkup.position) of the playlist scope
          */
@@ -898,7 +966,6 @@ function PushtapePlayer () {
               }
             }
             else {
-              var bodyEl = document.getElementsByTagName('body')[0];
               if (self.config.addControlsMarkup.position == 'top')  {
                 bodyEl.insertBefore(controlsMarkup, bodyEl.firstChild);  
               }
@@ -917,6 +984,7 @@ function PushtapePlayer () {
         }
         // Find the global controls...this can probably be optimized, but it's also supposed to be kinda granular.
         self.controls.playButton = document.getElementsByClassName(self.controls.playButtonClass)[0];
+        self.controls.playAllButton = document.getElementsByClassName(self.controls.playAllButtonClass)[0];
         self.controls.nextButton = document.getElementsByClassName(self.controls.nextButtonClass)[0];
         self.controls.previousButton = document.getElementsByClassName(self.controls.previousButtonClass)[0];  
         self.controls.currentTime = document.getElementsByClassName(self.controls.currentTimeClass)[0];  
@@ -926,9 +994,11 @@ function PushtapePlayer () {
         self.controls.position = document.getElementsByClassName(self.controls.positionClass)[0];  
         self.controls.scrubber = document.getElementsByClassName(self.controls.scrubberClass)[0];  
         self.controls.trackTitle = document.getElementsByClassName(self.controls.trackTitleClass)[0];  
+        self.controls.permaLink = document.getElementsByClassName(self.controls.permaLinkClass)[0];  
     
         // Global control bindings...check for nulls in case these elements don't exist.
         if (self.controls.playButton != null && foundItems > 0) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
+        if (self.controls.playAllButton != null && foundItems > 0) { _event['add'](self.controls.playAllButton,'click',self.globalTogglePlay);}
         if (self.controls.nextButton != null && foundItems > 0) { _event['add'](self.controls.nextButton,'click',self.globalNext);}
         if (self.controls.previousButton != null && foundItems > 0) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
       
@@ -970,7 +1040,7 @@ function PushtapePlayer () {
     
     // Play first track if autoPlay set
     if (self.config.autoPlay) {
-      self.handleClick({target:self.links[0],preventDefault:function(){}});
+      self.handleClick({target:self.links[0], preventDefault:function(){}});
     }
     
   }
@@ -984,7 +1054,7 @@ function PushtapePlayer () {
     // Remove link bindings
     var foundItems = 0;
     for (var i = 0; i < oLinks.length; i++) {
-      if ((sm.canPlayLink(oLinks[i]) || self.hasClass(oLinks[i],self.playableClass)) && !self.hasClass(oLinks[i],self.excludeClass) && !self.hasClass(oLinks[i], self.cueClass)) {
+      if ((sm.canPlayLink(oLinks[i]) || self.hasClass(oLinks[i], self.playableClass)) && !self.hasClass(oLinks[i],self.excludeClass) && !self.hasClass(oLinks[i], self.cueClass)) {
         if (self.config.linkClass.length <= 0 || self.hasClass(oLinks[i], self.config.linkClass)) {
           self.removeClass(oLinks[i], self.css.sDefault); // remove default CSS decoration
           oLinks[i].removeAttribute('data-pushtape-index', foundItems); 
@@ -1004,6 +1074,7 @@ function PushtapePlayer () {
 
     // Global control bindings...check for nulls in case these elements don't exist.
     _event['remove'](self.controls.playButton,'click', self.globalTogglePlay);
+    _event['remove'](self.controls.playAllButton,'click', self.globalTogglePlay);
     _event['remove'](self.controls.nextButton,'click', self.globalNext);
     _event['remove'](self.controls.previousButton,'click', self.globalPrevious);
     _event['remove'](document, 'click', self.handleClick);    
