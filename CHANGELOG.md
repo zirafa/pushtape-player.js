@@ -1,6 +1,10 @@
 # Change Log
 [Keep a changelog](http://keepachangelog.com/).
 
+## [2.0.4] - 2016-8-4
+### Fixed
+- playAllButton bug - playAll button lacking playlist context. Fix alters playAll button's state & behavior if the lastSound is orphaned.
+
 ## [2.0.3] - 2016-7-11
 ### Added
 - playAllButton - Clones playButton behavior (pt-play-all), useful for some UX designs that need two playbuttons 
