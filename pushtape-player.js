@@ -293,7 +293,7 @@ function PushtapePlayer () {
       if (elements[i].getAttribute('data-pushtape-sound-id') === oLink.id) {
         pl.removeClass(elements[i], oLink._data.className);
         oLink._data.className = cssClass;
-        pl.addClass(elements[i], oLink._data.className);    
+        pl.addClass(elements[i], oLink._data.className);
       }  
     }
   }
@@ -323,7 +323,7 @@ function PushtapePlayer () {
 
       // Remove/add class to individual sound link
       // Finding elements by attribute allows for continuity in ajax-y situations
-      // where this._data.oLink is unreliable
+      // where this._data.oLink is unreliable.
       pl.addStyleBySoundID(this, pl.css.sPlaying);
 
       // Remove/add class to global elements
@@ -331,7 +331,9 @@ function PushtapePlayer () {
       pl.addClass(self.controls.playButton, self.css.sPlaying);
       // Play All       
       pl.removeClass(self.controls.playAllButton, self.css.sPaused);
-      pl.addClass(self.controls.playAllButton, self.css.sPlaying);      
+      if (self.lastSound != null && self.lastSound._data.orphanedIndex != true) {
+        pl.addClass(self.controls.playAllButton, self.css.sPlaying);      
+      }
       // Body 
       pl.removeClass(bodyEl, self.css.sPaused);
       pl.addClass(bodyEl, self.css.sPlaying);   
@@ -777,7 +779,29 @@ function PushtapePlayer () {
       e.returnValue = false;
     }
     return false;
+  }
+  
+  this.globalTogglePlayAll = function(e) {
+    // If we don't have an orphaned lastSound, behave exactly like the globalTogglePlay button
+    // ...otherwise trigger playback of the first track in the page playlist.
+    if (self.lastSound != null && self.lastSound._data.orphanedIndex != true) {
+       self.globalTogglePlay(e);
+    }
+    else {
+      // Otherwise start playing first track
+      self.handleClick({target:self.links[0], preventDefault:function(){}});
+    }
+
+    if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
+      e.preventDefault();
+    } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
+      e.returnValue = false;
+    }
+    return false;
   }  
+
+        
+  
   this.globalNext = function(e) {
     sm._writeDebug('Play next track...');
     if (self.lastSound && self.lastSound._data.orphanedIndex != true) {
@@ -998,7 +1022,7 @@ function PushtapePlayer () {
     
         // Global control bindings...check for nulls in case these elements don't exist.
         if (self.controls.playButton != null && foundItems > 0) { _event['add'](self.controls.playButton,'click',self.globalTogglePlay);}
-        if (self.controls.playAllButton != null && foundItems > 0) { _event['add'](self.controls.playAllButton,'click',self.globalTogglePlay);}
+        if (self.controls.playAllButton != null && foundItems > 0) { _event['add'](self.controls.playAllButton,'click',self.globalTogglePlayAll);}
         if (self.controls.nextButton != null && foundItems > 0) { _event['add'](self.controls.nextButton,'click',self.globalNext);}
         if (self.controls.previousButton != null && foundItems > 0) { _event['add'](self.controls.previousButton,'click',self.globalPrevious);}
       
@@ -1074,7 +1098,7 @@ function PushtapePlayer () {
 
     // Global control bindings...check for nulls in case these elements don't exist.
     _event['remove'](self.controls.playButton,'click', self.globalTogglePlay);
-    _event['remove'](self.controls.playAllButton,'click', self.globalTogglePlay);
+    _event['remove'](self.controls.playAllButton,'click', self.globalTogglePlayAll);
     _event['remove'](self.controls.nextButton,'click', self.globalNext);
     _event['remove'](self.controls.previousButton,'click', self.globalPrevious);
     _event['remove'](document, 'click', self.handleClick);    
