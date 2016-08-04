@@ -11,7 +11,8 @@
  *   set pushtapePlayer.config.linkClass to only add links with a given class.
  * - Playlist index is automatically set via the data-pushtape-index attribute, based on the order links are found.
  * - Sounds are uniquely identified in each link via the data-pushtape-sound-id attribute. If not specified, an automatic ID will be generated per link. 
- *
+ * - The main playButton has global context. The playAll button has playlist context.
+ * 
  * Requires SoundManager 2 Javascript API: http://schillmania.com/projects/soundmanager2/
  */
 
@@ -72,7 +73,7 @@ function PushtapePlayer () {
   this.controls = {
     // CSS selectors for control elements
     playButtonClass: 'pt-play-pause',
-    playAllButtonClass: 'pt-play-all', // Clones playButton behavior, useful for some UX designs 
+    playAllButtonClass: 'pt-play-all', // Similar to playButton behavior, useful for some UX designs 
     nextButtonClass: 'pt-next',
     previousButtonClass: 'pt-previous',
     currentTimeClass: 'pt-current-time',
@@ -780,7 +781,6 @@ function PushtapePlayer () {
     }
     return false;
   }
-  
   this.globalTogglePlayAll = function(e) {
     // If we don't have an orphaned lastSound, behave exactly like the globalTogglePlay button
     // ...otherwise trigger playback of the first track in the page playlist.
@@ -799,9 +799,6 @@ function PushtapePlayer () {
     }
     return false;
   }  
-
-        
-  
   this.globalNext = function(e) {
     sm._writeDebug('Play next track...');
     if (self.lastSound && self.lastSound._data.orphanedIndex != true) {

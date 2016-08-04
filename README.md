@@ -105,7 +105,7 @@ Note: The body element and .pt-play-pause will also get link state classes.
 ## Utility classes
 - .pt-hide (If playable links are found, this is removed. Used to hide global controls if no links found. )
 - .pt-container (This is automatically applied to the container set by containerClass)
-- .pt-play-all (Clone of .pt-play-pause class. Useful for some UX designs where you need a second global play-pause button.)
+- .pt-play-all (Similar to .pt-play-pause class. Useful when you need a play-pause button for a specific playlist, in addition to a global play-pause button.)
 
 ## Default controls markup template
           <div class="pt-controls-markup">
@@ -129,7 +129,7 @@ Note: The body element and .pt-play-pause will also get link state classes.
             </div>
           </div>
 
-## Example template for playAll button (functions exactly like pt-play-pause)
+## Example template for playAll button (useful when you need a play-all button for a specific playlist, in addition to a global play-pause button.)
           <a class="pt-play-all" href="#" title="Play All">
             <span class="play-btn"><span class="pt-play-icon">▶</span></span>
             <span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span>
