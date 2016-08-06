@@ -782,13 +782,18 @@ function PushtapePlayer () {
     return false;
   }
   this.globalTogglePlayAll = function(e) {
-    // If we don't have an orphaned lastSound, behave exactly like the globalTogglePlay button
-    // ...otherwise trigger playback of the first track in the page playlist.
-    if (self.lastSound != null && self.lastSound._data.orphanedIndex != true) {
-       self.globalTogglePlay(e);
+    var lastIndex = self.links.length - 1;
+    if (self.lastSound != null && self.lastSound._data.index == lastIndex && self.playStatus == 'finished') {
+      // The playlist has ended, start over
+      self.handleClick({target:self.links[0], preventDefault:function(){}});  
     }
+    else if (self.lastSound != null && self.lastSound._data.orphanedIndex != true) {
+      // We are currently in the middle of a playlist, act like the globalTogglePlay button
+      self.globalTogglePlay(e);
+    }    
     else {
-      // Otherwise start playing first track
+      // self.lastSound == null || self.lastSound._data.orphanedIndex == true
+      // Playlist context doesn't exist, start from the first track
       self.handleClick({target:self.links[0], preventDefault:function(){}});
     }
 
@@ -798,7 +803,7 @@ function PushtapePlayer () {
       e.returnValue = false;
     }
     return false;
-  }  
+  } 
   this.globalNext = function(e) {
     sm._writeDebug('Play next track...');
     if (self.lastSound && self.lastSound._data.orphanedIndex != true) {

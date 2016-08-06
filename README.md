@@ -105,7 +105,7 @@ Note: The body element and .pt-play-pause will also get link state classes.
 ## Utility classes
 - .pt-hide (If playable links are found, this is removed. Used to hide global controls if no links found. )
 - .pt-container (This is automatically applied to the container set by containerClass)
-- .pt-play-all (Similar to .pt-play-pause class. Useful when you need a play-pause button for a specific playlist, in addition to a global play-pause button.)
+- .pt-play-all (Similar to .pt-play-pause class, but applies to current playlist context.)
 
 ## Default controls markup template
           <div class="pt-controls-markup">
@@ -129,11 +129,17 @@ Note: The body element and .pt-play-pause will also get link state classes.
             </div>
           </div>
 
-## Example template for playAll button (useful when you need a play-all button for a specific playlist, in addition to a global play-pause button.)
+## Example template for playAll button
           <a class="pt-play-all" href="#" title="Play All">
             <span class="play-btn"><span class="pt-play-icon">▶</span></span>
             <span class="pause-btn"><span class="pt-pause-icon">❚❚</span></span>
           </a>
+          
+The optional "Play All" button differs from the more global "Play Pause" button in the following ways:
+- If the last track in the playlist ends, pressing "Play All" will restart the playlist from the beginning, not replay the last track.
+- If audio is playing that isn't in the page playlist, "Play All" is not aware of it. If pressed it will just play the first track in the playlist.
+- If audio is playing and it exists in the page playlist, "Play All" and "Play Pause" will behave similarly.
+
 
 
 

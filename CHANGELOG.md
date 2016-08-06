@@ -1,6 +1,10 @@
 # Change Log
 [Keep a changelog](http://keepachangelog.com/).
 
+## [2.0.5] - 2016-8-5
+### Fixed
+- playAllButton bug - when playlist ends, playAll should restart the playlist, not replay the last track
+
 ## [2.0.4] - 2016-8-4
 ### Fixed
 - playAllButton bug - playAll button lacking playlist context. Fix alters playAll button's state & behavior if the lastSound is orphaned.
