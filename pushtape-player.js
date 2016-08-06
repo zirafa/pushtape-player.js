@@ -11,8 +11,7 @@
  *   set pushtapePlayer.config.linkClass to only add links with a given class.
  * - Playlist index is automatically set via the data-pushtape-index attribute, based on the order links are found.
  * - Sounds are uniquely identified in each link via the data-pushtape-sound-id attribute. If not specified, an automatic ID will be generated per link. 
- * - The main playButton has global context. The playAll button has playlist context.
- * 
+ *
  * Requires SoundManager 2 Javascript API: http://schillmania.com/projects/soundmanager2/
  */
 
@@ -109,7 +108,7 @@ function PushtapePlayer () {
   this.links = []; // keep track of current links on page
   this.prevLinks = []; // keep track of previous links on page, useful for mutation observer
   this.lastSound = null; // keep track of last sound played
-  this.playStatus = 'stopped'; // keep track of status of playback: stopped, paused, playing
+  this.playStatus = 'stopped'; // keep track of status of playback: stopped, paused, playing, finished, resumed
   this.soundCount = 0; // Used to create a unique sound ID
 
   this.css = {
@@ -289,14 +288,17 @@ function PushtapePlayer () {
     if (!oLink || !cssClass) {
       return false;
     }
+    var matchFound = false;
     var elements = pl.getElementsByAttribute('data-pushtape-sound-id');
     for (var i = 0; i < elements.length; i++) {
       if (elements[i].getAttribute('data-pushtape-sound-id') === oLink.id) {
         pl.removeClass(elements[i], oLink._data.className);
         oLink._data.className = cssClass;
         pl.addClass(elements[i], oLink._data.className);
+        matchFound = true;
       }  
     }
+    return matchFound;
   }
   
   this.removeStyleBySoundID = function(oLink) {
@@ -324,15 +326,15 @@ function PushtapePlayer () {
 
       // Remove/add class to individual sound link
       // Finding elements by attribute allows for continuity in ajax-y situations
-      // where this._data.oLink is unreliable.
-      pl.addStyleBySoundID(this, pl.css.sPlaying);
+      // where this._data.oLink is unreliable. Returns false if no matches found
+      var foundSound = pl.addStyleBySoundID(this, pl.css.sPlaying);
 
       // Remove/add class to global elements
       pl.removeClass(self.controls.playButton, self.css.sPaused);
       pl.addClass(self.controls.playButton, self.css.sPlaying);
       // Play All       
       pl.removeClass(self.controls.playAllButton, self.css.sPaused);
-      if (self.lastSound != null && self.lastSound._data.orphanedIndex != true) {
+      if (foundSound) {
         pl.addClass(self.controls.playAllButton, self.css.sPlaying);      
       }
       // Body 
@@ -402,7 +404,7 @@ function PushtapePlayer () {
       
     },
     resume: function() {
-      self.playStatus = 'playing';
+      self.playStatus = 'resumed';
       
       // If moving scrubber position...
       if (pl.dragActive) {
@@ -428,7 +430,7 @@ function PushtapePlayer () {
     },
 
     finish: function() {
-      self.playStatus = 'stopped';
+      self.playStatus = 'finished';
       
       // Restore original HTML <title>
       document.title = docTitle;
@@ -781,7 +783,9 @@ function PushtapePlayer () {
     }
     return false;
   }
+  
   this.globalTogglePlayAll = function(e) {
+    
     var lastIndex = self.links.length - 1;
     if (self.lastSound != null && self.lastSound._data.index == lastIndex && self.playStatus == 'finished') {
       // The playlist has ended, start over
@@ -803,7 +807,10 @@ function PushtapePlayer () {
       e.returnValue = false;
     }
     return false;
-  } 
+  }  
+
+        
+  
   this.globalNext = function(e) {
     sm._writeDebug('Play next track...');
     if (self.lastSound && self.lastSound._data.orphanedIndex != true) {
