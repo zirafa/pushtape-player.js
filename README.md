@@ -3,16 +3,17 @@ Pushtape-player.js
 
 A customizable JS audio page player for the [Pushtape](http://www.pushtape.com) project, including global playback controls and various config options. Treats a page as a playlist of audio links. No dependencies other than [Soundmanager2](http://www.schillmania.com/projects/soundmanager2). 
 
-#Demo
+# Demo
 Please visit http://zirafa.github.io/pushtape-player.js/demo for several examples of how the player can be customized.
 
-#Installation
+# Installation
 - Include soundmanager2.js and make sure the swf file path exists.
 - Include pushtape-player.js.
 - Initialize and setup your player (see below)
 - Note that this needs to run on a web server (or locally) via a LAMP/MAMP stack. You'll probably run into flash permission issues otherwise.
  
-#Example setup
+# Example setup
+```
     /**
      * Initialize Pushtape Player
      */
@@ -47,20 +48,21 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
         console.log('Error initializing the Pushtape player.');
       }  
     });
+```
 
+# Config options
 
-#Config options
 Option  | Type | Default | Description
 ------- | ---- | ------- | -----------
 playNext  | boolean | true  | Stop after one sound, or play through list until end
 autoPlay  | boolean | false | Start playing the first sound right away
 repeatAll | boolean | false | Repeat playlist from beginning after last track
 keyboardControl | boolean | true | Enable keyboard shortcuts: spacebar toggles play-pause, right and left arrows seek +/- 5 seconds
-containerClass | string | '' | Empty default scans entire page (document.body) for links, otherwise if set will only scan inside containerClass 
+containerClass | string | '' | Empty default scans entire page (document.body) for links, otherwise if set will only scan inside containerClass
 autoScan | string | true | Automatically observe changes to container and scan for new links to add to playlist
 linkClass | string | '' | Empty default will add all audio links found. If set to pushtape-player, will only add audio links that have the class, i.e. <a class="pushtape-player" href="file.mp3"></a>
 addControlsMarkup.enabled | boolean | false | If true, global controls markup is dynamically inserted inside of containerClass
-addControlsMarkup.controlsMarkupClass | string | 'pt-controls-wrapper' | Wrapper class 
+addControlsMarkup.controlsMarkupClass | string | 'pt-controls-wrapper' | Wrapper class
 addControlsMarkup.position | string | 'top' | Position the controls inside the top or bottom of the document or containerClass
   
 # Autoscan  
