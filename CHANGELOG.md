@@ -1,6 +1,10 @@
 # Change Log
 [Keep a changelog](http://keepachangelog.com/).
 
+## [2.0.6] - 2017-4-18
+### Added
+- keyboardControl option - adds keyboard shortcuts to player. Spacebar toggles play-pause, right and left arrow seeks +/- 5 seconds
+
 ## [2.0.5] - 2016-8-5
 ### Fixed
 - playAllButton bug - when playlist ends, playAll should restart the playlist, not replay the last track
