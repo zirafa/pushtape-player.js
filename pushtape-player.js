@@ -59,6 +59,7 @@ function PushtapePlayer () {
     playNext: true, // stop after one sound, or play through list until end
     autoPlay: false,  // start playing the first sound right away
     repeatAll: false, // repeat playlist after last track
+    keyboardControl: true, // allow spacebar to toggle play-pause, right and left arrows to seek +/- 5 seconds
     containerClass : '', // Default is to scan entire page for links, if set will scan only inside containerClass
     autoScan : true, // Automatically observe changes to container and scan for new links to add to playlist
     linkClass : '', // Default will add all audio links found. If set (i.e. pushtape-player), will only add audio links that have the class: <a class="pushtape-player" href="file.mp3"></a>
@@ -541,6 +542,7 @@ function PushtapePlayer () {
     self.dragActive = true;
     self.lastSound.pause();
     self.setPosition(e);
+    document.activeElement = o;
     if (!isTouchDevice) {
       _event.add(document,'mousemove',self.handleMouseMove);
     } else {
@@ -551,7 +553,27 @@ function PushtapePlayer () {
     }
     return self.stopEvent(e);
   };
+  this.keyboardToggle = function(e) {
+    var activeEl = document.activeElement;
   
+    // Allow spacebar to play-pause only if we have focus, otherwise default to normal spacebar behavior 
+    if (!self.config.keyboardControl && !self.hasClass(activeEl, self.controls.playButtonClass) && !self.hasClass(activeEl, self.controls.playAllButtonClass) && !self.hasClass(activeEl, self.css.sDefault) && !self.hasClass(oControl, self.controls.scrubberClass)) {
+      return true;
+    }
+    // 32 is spacebar
+    if (e.keyCode == "32") {
+      self.globalTogglePlay();
+    }
+    // 39 is right arrow (skip 5 seconds)
+    if (e.keyCode == "39") {
+      self.seekTime(5000);
+    }
+    // 37 is left arrow (rewind 5 seconds)
+    if (e.keyCode == "37") {
+      self.seekTime(-5000);
+    }
+    return self.stopEvent(e);
+  }
   this.handleMouseMove = function(e) {
     if (isTouchDevice && e.touches) {
       e = e.touches[0];
@@ -616,8 +638,19 @@ function PushtapePlayer () {
     if (!isNaN(nMsecOffset)) {
       oSound.setPosition(nMsecOffset);
     }
-  };  
+  };
   
+  this.seekTime = function(nMsecOffset) {
+    oSound = self.lastSound;
+    // play sound at this position
+    if (!isNaN(nMsecOffset)) {
+      nMsecOffset = oSound.position + nMsecOffset;
+      nMsecOffset = Math.min(nMsecOffset, oSound.duration);
+    }
+    if (!isNaN(nMsecOffset)) {
+      oSound.setPosition(nMsecOffset);
+    }
+  };
 
   this.stopEvent = function(e) {
    if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
@@ -626,7 +659,7 @@ function PushtapePlayer () {
       e.returnValue = false;
     }
     return false;
-  }
+  };
   
   this.getTheDamnTarget = function(e) {
     return (e.target||(window.event?window.event.srcElement:null));
@@ -741,6 +774,9 @@ function PushtapePlayer () {
     self.linksChanged = false;
     self.lastSound = thisSound; // reference for next call
     
+    // Since we override click behavior, give focus to the clicked element
+    document.activeElement = o;
+
     if (typeof e != 'undefined' && typeof e.preventDefault != 'undefined') {
       e.preventDefault();
     } else if (typeof e != 'undefined' && typeof e.returnValue != 'undefined') {
@@ -894,6 +930,7 @@ function PushtapePlayer () {
     function doEvents(action) { // action: add / remove
 
       _event[action](document,'click',self.handleClick);
+      _event[action](document,'keydown',self.keyboardToggle);
 
       if (!isTouchDevice) {
         _event[action](document,'mousedown',self.handleMouseDown);
@@ -1104,6 +1141,7 @@ function PushtapePlayer () {
     _event['remove'](document,'mouseup',self.stopDrag);
     _event['remove'](document,'touchstart',self.handleMouseDown);
     _event['remove'](document,'touchend',self.stopDrag);
+    _event['remove'](document,'keydown',self.keyboardToggle);
 
     // Global control bindings...check for nulls in case these elements don't exist.
     _event['remove'](self.controls.playButton,'click', self.globalTogglePlay);

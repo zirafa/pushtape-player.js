@@ -31,6 +31,7 @@ Please visit http://zirafa.github.io/pushtape-player.js/demo for several example
           playNext: true, // stop after one sound, or play through list until end
           autoPlay: false,  // start playing the first sound right away
           repeatAll: false, // repeat playlist after last track
+          keyboardControl: true, // allow spacebar to toggle play-pause, right and left arrows to seek +/- 5 seconds
           containerClass : '', // If empty, scan entire page for audio links. If set, limits the scope of search inside containerClass
           autoScan : true, // Automatically observe changes to container and scan for new links to add to playlist       
           linkClass : '', // By default, add all links found. If set, will only add links with this class 
@@ -54,6 +55,7 @@ Option  | Type | Default | Description
 playNext  | boolean | true  | Stop after one sound, or play through list until end
 autoPlay  | boolean | false | Start playing the first sound right away
 repeatAll | boolean | false | Repeat playlist from beginning after last track
+keyboardControl | boolean | true | Enable keyboard shortcuts: spacebar toggles play-pause, right and left arrows seek +/- 5 seconds
 containerClass | string | '' | Empty default scans entire page (document.body) for links, otherwise if set will only scan inside containerClass 
 autoScan | string | true | Automatically observe changes to container and scan for new links to add to playlist
 linkClass | string | '' | Empty default will add all audio links found. If set to pushtape-player, will only add audio links that have the class, i.e. <a class="pushtape-player" href="file.mp3"></a>
