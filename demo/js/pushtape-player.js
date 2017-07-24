@@ -539,10 +539,16 @@ function PushtapePlayer () {
     if (!self.withinStatusBar(o)) {
       return true;
     }
+    if (!self.lastSound) {
+      return true;
+    }
     self.dragActive = true;
     self.lastSound.pause();
     self.setPosition(e);
-    document.activeElement = o;
+    // Set keyboard focus
+    if (self.config.keyboardControl && self.controls.playButton) {
+      self.controls.playButton.focus();
+    }
     if (!isTouchDevice) {
       _event.add(document,'mousemove',self.handleMouseMove);
     } else {
@@ -555,9 +561,9 @@ function PushtapePlayer () {
   };
   this.keyboardToggle = function(e) {
     var activeEl = document.activeElement;
-  
+
     // Allow spacebar to play-pause only if we have focus, otherwise default to normal spacebar behavior 
-    if (!self.config.keyboardControl && !self.hasClass(activeEl, self.controls.playButtonClass) && !self.hasClass(activeEl, self.controls.playAllButtonClass) && !self.hasClass(activeEl, self.css.sDefault) && !self.hasClass(oControl, self.controls.scrubberClass)) {
+    if (!self.config.keyboardControl && !self.hasClass(activeEl, self.controls.playButtonClass) && !self.hasClass(activeEl, self.controls.playAllButtonClass) && !self.hasClass(activeEl, self.css.sDefault) && !self.hasClass(activeEl, self.controls.scrubberClass)) {
       return true;
     }
     // 32 is spacebar
